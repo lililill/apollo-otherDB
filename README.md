@@ -131,8 +131,12 @@ Java客户端不依赖任何框架，能够运行于所有Java运行时环境，
 </table>
 
 # Contribution
-  * Source Code: https://github.com/ctripcorp/apollo
-  * Issue Tracker: https://github.com/ctripcorp/apollo/issues
+
+Please make sure to read the [Contributing Guide](https://github.com/ctripcorp/apollo/blob/master/CONTRIBUTING.md) before making a pull request.
+
+Thanks for all the people who contributed to Apollo!
+
+<a href="https://github.com/ctripcorp/apollo/graphs/contributors"><img src="https://opencollective.com/apollo/contributors.svg?width=880&button=false" /></a>
 
 # License
 The project is licensed under the [Apache 2 license](https://github.com/ctripcorp/apollo/blob/master/LICENSE).
@@ -307,6 +311,7 @@ The project is licensed under the [Apache 2 license](https://github.com/ctripcor
 ![芙蓉兴盛](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/frxs.png) 
 ![野兽派](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/beastshop.png) 
 ![凯叔讲故事](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/kaishustory.png) 
+![好大夫在线](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/haodf.png) 
 
 # Awards
 
