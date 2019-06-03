@@ -313,6 +313,7 @@ The project is licensed under the [Apache 2 license](https://github.com/ctripcor
 ![凯叔讲故事](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/kaishustory.png) 
 ![好大夫在线](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/haodf.png) 
 ![云幂信息技术](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/insyunmi.png) 
+![兑吧](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/duiba.png) 
 
 # Awards
 
