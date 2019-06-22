@@ -320,6 +320,7 @@ The project is licensed under the [Apache 2 license](https://github.com/ctripcor
 ![云账房](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/yunzhangfang.png) 
 ![浙江远图互联](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/yuantutech.png) 
 ![青客公寓](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/qk365.png) 
+![东方财富](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/eastmoney.png) 
 
 # Awards
 
