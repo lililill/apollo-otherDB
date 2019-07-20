@@ -328,6 +328,8 @@ The project is licensed under the [Apache 2 license](https://github.com/ctripcor
 ![实习僧](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/xiaoyuanzhao.png) 
 ![达令家](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/dalingjia.png) 
 ![寺库](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/secoo.png) 
+![连连支付](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/lianlianpay.png) 
+![众安保险](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/zhongan.png) 
 
 # Awards
 
