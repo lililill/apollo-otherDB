@@ -333,6 +333,8 @@ The project is licensed under the [Apache 2 license](https://github.com/ctripcor
 ![360金融](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/360jinrong.png) 
 ![中航服商旅](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/caschina.png) 
 ![贝壳](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/ke.png) 
+![Yeahmobi易点天下](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/yeahmobi.png) 
+![北京登云美业网络科技有限公司](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/idengyun.png) 
 
 # Awards
 
