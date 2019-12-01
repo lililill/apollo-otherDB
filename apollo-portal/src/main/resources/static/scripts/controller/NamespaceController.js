@@ -114,7 +114,7 @@ namespace_module.controller("LinkNamespaceController",
                             setInterval(function () {
                                 $scope.submitBtnDisabled = false;
                                 $window.location.href =
-                                    '/namespace/role.html?#appid=' + $scope.appId
+                                AppUtil.prefixPath() + '/namespace/role.html?#appid=' + $scope.appId
                                     + "&namespaceName=" + $scope.namespaceName;
                             }, 1000);
                         }, function (result) {
@@ -142,7 +142,7 @@ namespace_module.controller("LinkNamespaceController",
                             setTimeout(function () {
                                 $scope.submitBtnDisabled = false;
                                 $window.location.href =
-                                    "/namespace/role.html?#/appid=" + $scope.appId
+                                AppUtil.prefixPath() + "/namespace/role.html?#/appid=" + $scope.appId
                                     + "&namespaceName=" + result.name;
                             }, 1000);
                         }, function (result) {
@@ -159,7 +159,7 @@ namespace_module.controller("LinkNamespaceController",
             };
 
             $scope.back = function () {
-                $window.location.href = '/config.html?#appid=' + $scope.appId;
+                $window.location.href = AppUtil.prefixPath() + '/config.html?#appid=' + $scope.appId;
             };
 
             $scope.switchType = function (type) {

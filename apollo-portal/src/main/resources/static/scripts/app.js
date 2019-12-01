@@ -1,11 +1,19 @@
+var prefixPath = window.localStorage.getItem("prefixPath") || "";
+
 /**utils*/
 var appUtil = angular.module('app.util', ['toastr', 'ngCookies', 'pascalprecht.translate'])
-    .config(['$translateProvider', function ($translateProvider) {
+    .constant("prefixLocation", prefixPath)      // 前缀路径
+    .filter('prefixPath',['prefixLocation', function(prefixLocation) {   // 前缀路径过滤器
+        return function(text) {
+            return prefixLocation + text;
+        }
+    }])
+    .config(['$translateProvider','prefixLocation', function ($translateProvider,prefixLocation) {
 
         $translateProvider.useSanitizeValueStrategy(null); // disable sanitization by default
         $translateProvider.useCookieStorage();
         $translateProvider.useStaticFilesLoader({
-            prefix: '/i18n/',
+            prefix: prefixLocation + '/i18n/',
             suffix: '.json'
         });
         $translateProvider.registerAvailableLanguageKeys(['en', 'zh-CN'], {
@@ -16,6 +24,8 @@ var appUtil = angular.module('app.util', ['toastr', 'ngCookies', 'pascalprecht.t
                             })
         $translateProvider.uniformLanguageTag('bcp47').determinePreferredLanguage();
     }]);
+
+
 /**service module 定义*/
 var appService = angular.module('app.service', ['ngResource', 'app.util'])
 
