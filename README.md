@@ -364,6 +364,7 @@ The project is licensed under the [Apache 2 license](https://github.com/ctripcor
 ![自如网](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/ziroom.png) 
 ![京东](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/jd.png) 
 ![兔展智能](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/rabbitpre.png) 
+![竹贝](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/zhubei.png) 
 
 # Awards
 
