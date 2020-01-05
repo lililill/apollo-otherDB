@@ -7,7 +7,7 @@ import com.ctrip.framework.apollo.common.exception.BadRequestException;
 import com.ctrip.framework.apollo.common.http.MultiResponseEntity;
 import com.ctrip.framework.apollo.common.http.RichResponseEntity;
 import com.ctrip.framework.apollo.core.ConfigConsts;
-import com.ctrip.framework.apollo.core.enums.Env;
+import com.ctrip.framework.apollo.portal.environment.Env;
 import com.ctrip.framework.apollo.portal.component.PortalSettings;
 import com.ctrip.framework.apollo.portal.entity.model.AppModel;
 import com.ctrip.framework.apollo.portal.entity.po.Role;
@@ -181,16 +181,16 @@ public class AppController {
   }
 
   @GetMapping("/{appId}/miss_envs")
-  public MultiResponseEntity<Env> findMissEnvs(@PathVariable String appId) {
+  public MultiResponseEntity<String> findMissEnvs(@PathVariable String appId) {
 
-    MultiResponseEntity<Env> response = MultiResponseEntity.ok();
+    MultiResponseEntity<String> response = MultiResponseEntity.ok();
     for (Env env : portalSettings.getActiveEnvs()) {
       try {
         appService.load(env, appId);
       } catch (Exception e) {
         if (e instanceof HttpClientErrorException &&
             ((HttpClientErrorException) e).getStatusCode() == HttpStatus.NOT_FOUND) {
-          response.addResponseEntity(RichResponseEntity.ok(env));
+          response.addResponseEntity(RichResponseEntity.ok(env.toString()));
         } else {
           response.addResponseEntity(RichResponseEntity.error(HttpStatus.INTERNAL_SERVER_ERROR,
               String.format("load appId:%s from env %s error.", appId,
