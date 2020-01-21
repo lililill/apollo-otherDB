@@ -10,6 +10,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.ctrip.framework.apollo.enums.ConfigSourceType;
+import com.ctrip.framework.apollo.util.factory.DefaultPropertiesFactory;
+import com.ctrip.framework.apollo.util.factory.PropertiesFactory;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import java.io.File;
@@ -57,6 +59,7 @@ public class DefaultConfigTest {
   public void setUp() throws Exception {
     MockInjector.reset();
     MockInjector.setInstance(ConfigUtil.class, new MockConfigUtil());
+    MockInjector.setInstance(PropertiesFactory.class, new DefaultPropertiesFactory());
 
     someResourceDir = new File(ClassLoaderUtil.getClassPath() + "/META-INF/config");
     someResourceDir.mkdirs();

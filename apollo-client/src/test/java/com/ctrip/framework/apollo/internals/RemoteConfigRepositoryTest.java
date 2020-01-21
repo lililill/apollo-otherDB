@@ -1,5 +1,6 @@
 package com.ctrip.framework.apollo.internals;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -22,6 +23,8 @@ import com.ctrip.framework.apollo.core.signature.Signature;
 import com.ctrip.framework.apollo.enums.ConfigSourceType;
 import com.ctrip.framework.apollo.exceptions.ApolloConfigException;
 import com.ctrip.framework.apollo.util.ConfigUtil;
+import com.ctrip.framework.apollo.util.factory.DefaultPropertiesFactory;
+import com.ctrip.framework.apollo.util.factory.PropertiesFactory;
 import com.ctrip.framework.apollo.util.http.HttpRequest;
 import com.ctrip.framework.apollo.util.http.HttpResponse;
 import com.ctrip.framework.apollo.util.http.HttpUtil;
@@ -37,6 +40,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletResponse;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,12 +49,14 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+import org.springframework.test.util.ReflectionTestUtils;
 
 /**
  * Created by Jason on 4/9/16.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class RemoteConfigRepositoryTest {
+
   @Mock
   private ConfigServiceLocator configServiceLocator;
   private String someNamespace;
@@ -92,16 +98,26 @@ public class RemoteConfigRepositoryTest {
 
     MockInjector.setInstance(RemoteConfigLongPollService.class, remoteConfigLongPollService);
 
+    System.setProperty(PropertiesFactory.APOLLO_PROPERTY_ORDER_ENABLE, "true");
+    PropertiesFactory propertiesFactory = new DefaultPropertiesFactory();
+    MockInjector.setInstance(PropertiesFactory.class, propertiesFactory);
+
     someAppId = "someAppId";
     someCluster = "someCluster";
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    System.clearProperty(PropertiesFactory.APOLLO_PROPERTY_ORDER_ENABLE);
   }
 
   @Test
   public void testLoadConfig() throws Exception {
     String someKey = "someKey";
     String someValue = "someValue";
-    Map<String, String> configurations = Maps.newHashMap();
+    Map<String, String> configurations = Maps.newLinkedHashMap();
     configurations.put(someKey, someValue);
+    configurations.put("someKey2", "someValue2");
     ApolloConfig someApolloConfig = assembleApolloConfig(configurations);
 
     when(someResponse.getStatusCode()).thenReturn(200);
@@ -111,9 +127,16 @@ public class RemoteConfigRepositoryTest {
 
     Properties config = remoteConfigRepository.getConfig();
 
-    assertEquals(configurations, config);
+//    assertEquals(configurations, config);
+    assertTrue(configurations.equals(config));
     assertEquals(ConfigSourceType.REMOTE, remoteConfigRepository.getSourceType());
     remoteConfigLongPollService.stopLongPollingRefresh();
+
+    if (configUtil.isPropertiesOrderEnabled()) {
+      String[] actualArrays = config.keySet().toArray(new String[]{});
+      String[] expectedArrays = {"someKey", "someKey2"};
+      assertArrayEquals(expectedArrays, actualArrays);
+    }
   }
 
   @Test
@@ -236,7 +259,8 @@ public class RemoteConfigRepositoryTest {
     verify(someListener, times(1)).onRepositoryChange(eq(someNamespace), captor.capture());
     assertEquals(newConfigurations, captor.getValue());
 
-    final ArgumentCaptor<HttpRequest> httpRequestArgumentCaptor = ArgumentCaptor.forClass(HttpRequest.class);
+    final ArgumentCaptor<HttpRequest> httpRequestArgumentCaptor = ArgumentCaptor
+        .forClass(HttpRequest.class);
     verify(httpUtil, atLeast(2)).doGet(httpRequestArgumentCaptor.capture(), eq(ApolloConfig.class));
 
     HttpRequest request = httpRequestArgumentCaptor.getValue();
@@ -265,7 +289,8 @@ public class RemoteConfigRepositoryTest {
     when(someApolloConfig.getReleaseKey()).thenReturn(someReleaseKey);
 
     String queryConfigUrl = remoteConfigRepository
-        .assembleQueryConfigUrl(someUri, someAppId, someCluster, someNamespace, null, notificationMessages,
+        .assembleQueryConfigUrl(someUri, someAppId, someCluster, someNamespace, null,
+            notificationMessages,
             someApolloConfig);
 
     remoteConfigLongPollService.stopLongPollingRefresh();
@@ -275,7 +300,8 @@ public class RemoteConfigRepositoryTest {
     assertTrue(queryConfigUrl
         .contains("releaseKey=20160705193346-583078ef5716c055%2B20160705193308-31c471ddf9087c3f"));
     assertTrue(queryConfigUrl
-        .contains("messages=" + UrlEscapers.urlFormParameterEscaper().escape(gson.toJson(notificationMessages))));
+        .contains("messages=" + UrlEscapers.urlFormParameterEscaper()
+            .escape(gson.toJson(notificationMessages))));
   }
 
   private ApolloConfig assembleApolloConfig(Map<String, String> configurations) {
@@ -291,6 +317,7 @@ public class RemoteConfigRepositoryTest {
   }
 
   public static class MockConfigUtil extends ConfigUtil {
+
     @Override
     public String getAppId() {
       return someAppId;
@@ -338,9 +365,10 @@ public class RemoteConfigRepositoryTest {
   }
 
   public static class MockHttpUtil extends HttpUtil {
+
     @Override
     public <T> HttpResponse<T> doGet(HttpRequest httpRequest, Class<T> responseType) {
-      if (someResponse.getStatusCode() == 200 || someResponse.getStatusCode() == 304 ) {
+      if (someResponse.getStatusCode() == 200 || someResponse.getStatusCode() == 304) {
         return (HttpResponse<T>) someResponse;
       }
       throw new ApolloConfigException(String.format("Http request failed due to status code: %d",

@@ -1,5 +1,9 @@
 package com.ctrip.framework.apollo.internals;
 
+import static org.hamcrest.Matchers.both;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.isIn;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -10,11 +14,15 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.ctrip.framework.apollo.enums.ConfigSourceType;
+import com.ctrip.framework.apollo.util.factory.DefaultPropertiesFactory;
+import com.ctrip.framework.apollo.util.factory.PropertiesFactory;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Map.Entry;
 import java.util.Properties;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +39,7 @@ import com.google.common.io.Files;
  * Created by Jason on 4/9/16.
  */
 public class LocalFileConfigRepositoryTest {
+
   private File someBaseDir;
   private String someNamespace;
   private ConfigRepository upstreamRepo;
@@ -40,6 +49,7 @@ public class LocalFileConfigRepositoryTest {
   private String defaultKey;
   private String defaultValue;
   private ConfigSourceType someSourceType;
+  private MockConfigUtil configUtil;
 
   @Before
   public void setUp() throws Exception {
@@ -57,7 +67,10 @@ public class LocalFileConfigRepositoryTest {
     when(upstreamRepo.getSourceType()).thenReturn(someSourceType);
 
     MockInjector.reset();
-    MockInjector.setInstance(ConfigUtil.class, new MockConfigUtil());
+    configUtil = new MockConfigUtil();
+    MockInjector.setInstance(ConfigUtil.class, configUtil);
+    MockInjector.setInstance(PropertiesFactory.class, new DefaultPropertiesFactory());
+
   }
 
   @After
@@ -110,7 +123,8 @@ public class LocalFileConfigRepositoryTest {
 
     Files.write(defaultKey + "=" + someValue, file, Charsets.UTF_8);
 
-    LocalFileConfigRepository localRepo = new LocalFileConfigRepository(someNamespace, upstreamRepo);
+    LocalFileConfigRepository localRepo = new LocalFileConfigRepository(someNamespace,
+        upstreamRepo);
     localRepo.setLocalCacheDir(someBaseDir, true);
 
     Properties properties = localRepo.getConfig();
@@ -127,9 +141,20 @@ public class LocalFileConfigRepositoryTest {
 
     Properties result = localFileConfigRepository.getConfig();
 
-    assertThat(
-        "LocalFileConfigRepository's properties should be the same as fallback repo's when there is no local cache",
-        result.entrySet(), equalTo(someProperties.entrySet()));
+    if (!isJDK11() || (isJDK11() && configUtil.isPropertiesOrderEnabled())) {
+      assertThat(
+          "LocalFileConfigRepository's properties should be the same as fallback repo's when there is no local cache",
+          result.entrySet(), equalTo(someProperties.entrySet()));
+    } else {
+      //In JDK11 Properties return EntrySet without customize equals implementation, so equalTo will check
+      //whether they are same object. This is why two statements are used to check items in entryset.
+      assertThat(
+          "LocalFileConfigRepository's properties should be the same as fallback repo's when there is no local cache",
+          result.entrySet(), everyItem(isIn(someProperties.entrySet())));
+      assertThat(
+          "LocalFileConfigRepository's properties should be the same as fallback repo's when there is no local cache",
+          someProperties.entrySet(), everyItem(isIn(result.entrySet())));
+    }
     assertEquals(someSourceType, localFileConfigRepository.getSourceType());
   }
 
@@ -148,9 +173,20 @@ public class LocalFileConfigRepositoryTest {
 
     Properties anotherProperties = anotherLocalRepoWithNoFallback.getConfig();
 
-    assertThat(
-        "LocalFileConfigRepository should persist local cache files and return that afterwards",
-        someProperties.entrySet(), equalTo(anotherProperties.entrySet()));
+    if (!isJDK11() || (isJDK11() && configUtil.isPropertiesOrderEnabled())) {
+      assertThat(
+          "LocalFileConfigRepository should persist local cache files and return that afterwards",
+          someProperties.entrySet(), equalTo(anotherProperties.entrySet()));
+    } else {
+      //In JDK11 Properties return EntrySet without customize equals implementation, so equalTo will check
+      //whether they are same object. This is why two statements are used to check items in entryset.
+      assertThat(
+          "LocalFileConfigRepository's properties should be the same as fallback repo's when there is no local cache",
+          someProperties.entrySet(), everyItem(isIn(anotherProperties.entrySet())));
+      assertThat(
+          "LocalFileConfigRepository's properties should be the same as fallback repo's when there is no local cache",
+          anotherProperties.entrySet(), everyItem(isIn(someProperties.entrySet())));
+    }
     assertEquals(someSourceType, localRepo.getSourceType());
   }
 
@@ -185,6 +221,7 @@ public class LocalFileConfigRepositoryTest {
   }
 
   public static class MockConfigUtil extends ConfigUtil {
+
     @Override
     public String getAppId() {
       return someAppId;
@@ -193,6 +230,10 @@ public class LocalFileConfigRepositoryTest {
     @Override
     public String getCluster() {
       return someCluster;
+    }
+
+    public String getJavaVersion() {
+      return System.getProperty("java.version");
     }
   }
 
@@ -208,5 +249,9 @@ public class LocalFileConfigRepositoryTest {
       }
     }
     return file;
+  }
+
+  private boolean isJDK11() {
+    return configUtil.getJavaVersion().startsWith("11.");
   }
 }
