@@ -372,6 +372,7 @@ The project is licensed under the [Apache 2 license](https://github.com/ctripcor
 ![阿卡索](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/acadsoc.png) 
 ![妙知旅](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/mojory.png) 
 ![程多多](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/chengduoduo.png) 
+![上汽通用五菱](https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/known-users/baojunev.png) 
 
 # Awards
 
