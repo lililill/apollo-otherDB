@@ -124,9 +124,9 @@ Java客户端不依赖任何框架，能够运行于所有Java运行时环境，
   <tbody>
     <tr>
       <td><img src="https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/tech-support/tech-support-qq-5.png" alt="tech-support-qq-5"></td>
+      <td><img src="https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/tech-support/tech-support-qq-2.png" alt="tech-support-qq-2"></td>
       <td><img src="https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/tech-support/tech-support-qq-4.png" alt="tech-support-qq-4"></td>
       <td><img src="https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/tech-support/tech-support-qq-3.png" alt="tech-support-qq-3"></td>
-      <td><img src="https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/tech-support/tech-support-qq-2.png" alt="tech-support-qq-2"></td>
       <td><img src="https://raw.githubusercontent.com/ctripcorp/apollo-community/master/images/tech-support/tech-support-qq-1.png" alt="tech-support-qq-1"></td>
     </tr>
   </tbody>
