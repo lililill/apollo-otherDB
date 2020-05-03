@@ -116,9 +116,9 @@ Java客户端不依赖任何框架，能够运行于所有Java运行时环境，
 <table>
   <thead>
     <th>Apollo技术支持⑤群<br />群号：914839843（未满）</th>
+    <th>Apollo技术支持②群<br />群号：904287263（未满）</th>
     <th>Apollo技术支持④群<br />群号：516773934（已满）</th>
     <th>Apollo技术支持③群<br />群号：742035428（已满）</th>
-    <th>Apollo技术支持②群<br />群号：904287263（已满）</th>
     <th>Apollo技术支持①群<br />群号：375526581（已满）</th>
   </thead>
   <tbody>
