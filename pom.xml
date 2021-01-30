@@ -286,6 +286,12 @@
 				<artifactId>guice</artifactId>
 				<version>4.1.0</version>
 			</dependency>
+			<!-- to fix CVE-2020-26217 -->
+			<dependency>
+				<groupId>com.thoughtworks.xstream</groupId>
+				<artifactId>xstream</artifactId>
+				<version>1.4.15</version>
+			</dependency>
 			<!--for test -->
 			<dependency>
 				<groupId>com.h2database</groupId>
