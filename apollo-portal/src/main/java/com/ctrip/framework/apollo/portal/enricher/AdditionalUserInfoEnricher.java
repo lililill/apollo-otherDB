@@ -14,26 +14,22 @@
  * limitations under the License.
  *
  */
-package com.ctrip.framework.apollo.portal.spi.defaultimpl;
+package com.ctrip.framework.apollo.portal.enricher;
 
-import com.ctrip.framework.apollo.portal.spi.UserInfoHolder;
+import com.ctrip.framework.apollo.portal.enricher.adapter.UserInfoEnrichedAdapter;
 import com.ctrip.framework.apollo.portal.entity.bo.UserInfo;
+import java.util.Map;
 
 /**
- * 不是ctrip的公司默认提供一个假用户
+ * @author vdisk <vdisk@foxmail.com>
  */
-public class DefaultUserInfoHolder implements UserInfoHolder {
+public interface AdditionalUserInfoEnricher {
 
-
-  public DefaultUserInfoHolder() {
-
-  }
-
-  @Override
-  public UserInfo getUser() {
-    UserInfo userInfo = new UserInfo();
-    userInfo.setUserId("apollo");
-    userInfo.setName("apollo");
-    return userInfo;
-  }
+  /**
+   * enrich an additional user info for the dto list
+   *
+   * @param adapter     enrich adapter
+   * @param userInfoMap userInfo map
+   */
+  void enrichAdditionalUserInfo(UserInfoEnrichedAdapter adapter, Map<String, UserInfo> userInfoMap);
 }
