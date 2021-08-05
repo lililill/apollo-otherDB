@@ -128,9 +128,9 @@ public class AppNamespaceService {
     }
 
     // public namespaces only allow properties format
-    if (appNamespace.isPublic()) {
-      appNamespace.setFormat(ConfigFileFormat.Properties.getValue());
-    }
+//    if (appNamespace.isPublic()) {
+//      appNamespace.setFormat(ConfigFileFormat.Properties.getValue());
+//    }
 
     StringBuilder appNamespaceName = new StringBuilder();
     //add prefix postfix

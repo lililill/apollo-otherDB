@@ -86,7 +86,8 @@ namespace_module.controller("LinkNamespaceController",
             };
 
             function shouldAppendNamespacePrefix() {
-                 return $scope.appNamespace.isPublic ? $scope.appendNamespacePrefix : false;
+                //return $scope.appNamespace.isPublic ? $scope.appendNamespacePrefix : false;
+                return  $scope.appendNamespacePrefix;
             }
 
             var selectedClusters = [];
@@ -150,9 +151,9 @@ namespace_module.controller("LinkNamespaceController",
                     }
 
                     // public namespaces only allow properties format
-                    if ($scope.appNamespace.isPublic) {
-                        $scope.appNamespace.format = 'properties';
-                    }
+                    // if ($scope.appNamespace.isPublic) {
+                    //     $scope.appNamespace.format = 'properties';
+                    // }
 
                     $scope.submitBtnDisabled = true;
                     //only append namespace prefix for public app namespace
