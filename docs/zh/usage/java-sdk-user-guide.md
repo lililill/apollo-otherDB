@@ -336,6 +336,49 @@ Apollo从1.6.0版本开始增加访问密钥机制，从而只有经过身份验
    * 可以在Spring Boot的`application.properties`或`bootstrap.properties`中指定`apollo.property.names.cache.enable=true`
 4. 通过`app.properties`配置文件
    * 可以在`classpath:/META-INF/app.properties`指定`apollo.property.names.cache.enable=true`
+   
+#### 1.2.4.7 ApolloLabel
+
+ApolloLabel是应用的标签信息，是从服务端获取配置的一个重要信息，用于灰度规则的配置。
+
+有以下几种方式设置，按照优先级从高到低分别为：
+
+1. System Property
+
+Apollo 1.9.2+支持通过System Property传入apollo.label信息，如
+
+```bash
+-Dapollo.label=YOUR-APOLLO-LABEL
+```
+
+2. 操作系统的System Environment
+
+Apollo 1.9.2+支持通过操作系统的System Environment `APP_LABEL`来传入apollo.label信息，如
+
+```bash
+APOLLO_LABEL=YOUR-APOLLO-LABEL
+```
+
+3. Spring Boot application.properties
+
+Apollo 1.9.2+支持通过Spring Boot的application.properties文件配置，如
+
+```properties
+apollo.label=YOUR-APOLLO-LABEL
+```
+
+> 该配置方式不适用于多个war包部署在同一个tomcat的使用场景
+
+4. app.properties
+
+确保classpath:/META-INF/app.properties文件存在，并且其中内容形如：
+>apollo.label=YOUR-APOLLO-LABEL
+
+文件位置参考如下：
+
+![app-id-location](https://raw.githubusercontent.com/ctripcorp/apollo/master/apollo-client/doc/pic/app-id-location.png)
+
+> 注：apollo.label是用来标识应用身份的标签，格式为string。
 
 # 二、Maven Dependency
 Apollo的客户端jar包已经上传到中央仓库，应用在实际使用时只需要按照如下方式引入即可。

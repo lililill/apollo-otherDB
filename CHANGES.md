@@ -17,6 +17,7 @@ Apollo 1.10.0
 * [feat(scripts): use bash to call openapi](https://github.com/apolloconfig/apollo/pull/3980)
 * [Support search by item](https://github.com/apolloconfig/apollo/pull/3977)
 * [Implement password policies to avoid weak passwords](https://github.com/apolloconfig/apollo/pull/4008)
+* [Extend the gray release capability to support dimensions other than IP](https://github.com/apolloconfig/apollo/pull/4013)
 * [public namespace basic function](https://github.com/apolloconfig/apollo/pull/3850)
 
 ------------------
