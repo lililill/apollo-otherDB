@@ -16,6 +16,8 @@
  */
 package com.ctrip.framework.apollo.metaservice.service;
 
+import java.util.List;
+
 import com.ctrip.framework.apollo.core.dto.ServiceDTO;
 import com.google.common.collect.Lists;
 import org.junit.Before;
@@ -23,42 +25,36 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.consul.discovery.ConsulDiscoveryClient;
 
-import java.util.List;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.zookeeper.discovery.ZookeeperDiscoveryClient;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * @author kl (http://kailing.pub)
- * @since 2021/3/1
- */
 @RunWith(MockitoJUnitRunner.class)
-public class ConsulDiscoveryServiceTest {
+public class ZookeeperDiscoveryServiceTest {
 
     @Mock
-    private ConsulDiscoveryClient consulDiscoveryClient;
+    private ZookeeperDiscoveryClient zookeeperDiscoveryClient;
 
-    private SpringCloudInnerDiscoveryService consulDiscoveryService;
+    private SpringCloudInnerDiscoveryService zookeeperDiscoveryService;
 
     private String someServiceId;
 
     @Before
     public void setUp() throws Exception {
-        consulDiscoveryService = new SpringCloudInnerDiscoveryService(consulDiscoveryClient);
+        zookeeperDiscoveryService = new SpringCloudInnerDiscoveryService(zookeeperDiscoveryClient);
         someServiceId = "someServiceId";
     }
 
     @Test
-    public void testGetServiceInstancesWithNullInstances() {
-        when(consulDiscoveryClient.getInstances(someServiceId)).thenReturn(null);
-        assertTrue(consulDiscoveryService.getServiceInstances(someServiceId).isEmpty());
+    public void testGetServiceInstancesWithEmptyInstances() {
+        when(zookeeperDiscoveryClient.getInstances(someServiceId)).thenReturn(null);
+        assertTrue(zookeeperDiscoveryService.getServiceInstances(someServiceId).isEmpty());
     }
-
 
     @Test
     public void testGetServiceInstances() {
@@ -67,10 +63,10 @@ public class ConsulDiscoveryServiceTest {
         String someInstanceId = "someInstanceId";
         ServiceInstance someServiceInstance = mockServiceInstance(someInstanceId, someIp, somePort);
 
-        when(consulDiscoveryClient.getInstances(someServiceId)).thenReturn(
+        when(zookeeperDiscoveryClient.getInstances(someServiceId)).thenReturn(
                 Lists.newArrayList(someServiceInstance));
 
-        List<ServiceDTO> serviceDTOList = consulDiscoveryService.getServiceInstances(someServiceId);
+        List<ServiceDTO> serviceDTOList = zookeeperDiscoveryService.getServiceInstances(someServiceId);
         ServiceDTO serviceDTO = serviceDTOList.get(0);
         assertEquals(1, serviceDTOList.size());
         assertEquals(someServiceId, serviceDTO.getAppName());
@@ -86,6 +82,5 @@ public class ConsulDiscoveryServiceTest {
 
         return serviceInstance;
     }
-
 
 }
