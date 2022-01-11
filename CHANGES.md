@@ -32,6 +32,7 @@ Apollo 2.0.0
 * [Bump guava from 29.0 to 31.0.1](https://github.com/apolloconfig/apollo/pull/4182)
 * [fix the json number display issue when it's longer than 16](https://github.com/apolloconfig/apollo/pull/4183)
 * [Bump client springboot version](https://github.com/apolloconfig/apollo/pull/4189)
+* [The release history of namespaces that are not properties will also show comments and release times](https://github.com/apolloconfig/apollo/pull/4198)
 * [Add unit tests for Utils](https://github.com/apolloconfig/apollo/pull/4193)
 
 ------------------
