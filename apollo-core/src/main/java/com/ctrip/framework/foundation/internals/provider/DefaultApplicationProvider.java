@@ -173,7 +173,7 @@ public class DefaultApplicationProvider implements ApplicationProvider {
       return;
     }
 
-    m_appLabel=null;
+    m_appLabel = null;
     logger.warn("app.label is not available from System Property and {}. It is set to null",
         APP_PROPERTIES_CLASSPATH);
   }
