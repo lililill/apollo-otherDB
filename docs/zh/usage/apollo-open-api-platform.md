@@ -77,21 +77,21 @@ namespaceName | 所管理的Namespace的名称，如果是非properties格式，
 
 #### 3.2 API接口列表
 
-- [3.2.1 获取 App 的环境，集群信息](#/zh/usage/apollo-open-api-platform?id=_321-获取app的环境，集群信息)
-- [3.2.2 获取 App 信息](#/zh/usage/apollo-open-api-platform?id=_322-获取app信息)
-- [3.2.3 获取集群详细信息](#/zh/usage/apollo-open-api-platform?id=_323-获取集群接口)
-- [3.2.4 创建集群](#/zh/usage/apollo-open-api-platform?id=_324-创建集群接口)
-- [3.2.5 获取集群下所有 Namespace 信息](#/zh/usage/apollo-open-api-platform?id=_325-获取集群下所有namespace信息接口)
-- [3.2.6 获取 Namespace 信息](#/zh/usage/apollo-open-api-platform?id=_326-获取某个namespace信息接口)
-- [3.2.7 创建 Namespace](#/zh/usage/apollo-open-api-platform?id=_327-创建namespace)
-- [3.2.8 获取 Namespace 当前编辑人](#/zh/usage/apollo-open-api-platform?id=_328-获取某个namespace当前编辑人接口)
-- [3.2.9 获取具体配置项](#/zh/usage/apollo-open-api-platform?id=_329-读取配置接口)
-- [3.2.10 新增配置项](#/zh/usage/apollo-open-api-platform?id=_3210-新增配置接口)
-- [3.2.11 需改配置项](#/zh/usage/apollo-open-api-platform?id=_3211-修改配置接口)
-- [3.2.12 删除配置项](#/zh/usage/apollo-open-api-platform?id=_3212-删除配置接口)
-- [3.2.13 发布 Namespace](#/zh/usage/apollo-open-api-platform?id=_3213-发布配置接口)
-- [3.2.14 获取 Namespace 最后一次发布的内容](#/zh/usage/apollo-open-api-platform?id=_3214-获取某个namespace当前生效的已发布配置接口)
-- [3.2.15 回滚 Namespace](#/zh/usage/apollo-open-api-platform?id=_3215-回滚已发布配置接口)
+- [3.2.1 获取 App 的环境，集群信息](#_321-获取app的环境，集群信息)
+- [3.2.2 获取 App 信息](#_322-获取app信息)
+- [3.2.3 获取集群详细信息](#_323-获取集群接口)
+- [3.2.4 创建集群](#_324-创建集群接口)
+- [3.2.5 获取集群下所有 Namespace 信息](#_325-获取集群下所有namespace信息接口)
+- [3.2.6 获取 Namespace 信息](#_326-获取某个namespace信息接口)
+- [3.2.7 创建 Namespace](#_327-创建namespace)
+- [3.2.8 获取 Namespace 当前编辑人](#_328-获取某个namespace当前编辑人接口)
+- [3.2.9 获取具体配置项](#_329-读取配置接口)
+- [3.2.10 新增配置项](#_3210-新增配置接口)
+- [3.2.11 需改配置项](#_3211-修改配置接口)
+- [3.2.12 删除配置项](#_3212-删除配置接口)
+- [3.2.13 发布 Namespace](#_3213-发布配置接口)
+- [3.2.14 获取 Namespace 最后一次发布的内容](#_3214-获取某个namespace当前生效的已发布配置接口)
+- [3.2.15 回滚 Namespace](#_3215-回滚已发布配置接口)
 
 ##### 3.2.1 获取App的环境，集群信息
 
