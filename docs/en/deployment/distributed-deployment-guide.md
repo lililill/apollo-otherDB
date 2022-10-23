@@ -583,6 +583,24 @@ apollo.config-service.url=http://apollo-config-service
 apollo.admin-service.url=http://apollo-admin-service
 ````
 
+##### 2.2.1.2.11 Enable database-discovery to replace built-in eureka
+
+> For version 2.1.0 and above
+> 
+> Apollo supports the use of internal database table as registry, without relying on third-party registry.
+
+1. Modify build.sh/build.bat and change the maven compilation commands of `config-service` and `admin-service` to
+```shell
+mvn clean package -Pgithub -DskipTests -pl apollo-configservice,apollo-adminservice -am -Dapollo_profile=github,database-discovery -Dspring_datasource_url=$apollo_config_db_url -Dspring_datasource_username=$apollo_config_db_username -Dspring_datasource_password=$apollo_config_db_password
+```
+
+2. In multi-cluster deployments, if you want apollo client only read Config Service in the same cluster,
+you can add a property in `config/application-github.properties` of the Config Service and Admin Service installation package
+```properties
+apollo.service.registry.cluster=same name with apollo Cluster
+```
+
+
 ### 2.2.2 Deploy Apollo server
 
 #### 2.2.2.1 Deploy apollo-configservice
@@ -1343,7 +1361,7 @@ http://5.5.5.5:8080/eureka/,http://6.6.6.6:8080/eureka/
 
 >Note 2: If you want to register Config Service and Admin Service to the company's unified Eureka, you can refer to [Deployment & Development FAQ - Registering Config Service and Admin Service to a separate Eureka Server](en/faq/common-issues-in-deployment-and-development-phase?id=_8-register-config-service-and-admin-service-to-a-separate-eureka-server) section
 
->Note 3: In multi-room deployments, you often want the config service and admin service to register only with the eureka in the same room. To achieve this, you need to use the cluster field in the `ServerConfig` table, and the config service and admin service will read the `/opt/settings/server.properties` (Mac/Linux) or `C:\opt\settings\server.properties` (Windows), and if the idc has a corresponding eureka.service.url configuration, then will only register with eureka for that server room. For example, if the config service and admin service are deployed to two IDCs, `SHAOY` and `SHAJQ`, then in order to register the services in these two server rooms only with that server room, you can add two new records in the `ServerConfig` table and fill in the `SHAOY` and `SHAJQ` server room eureka addresses respectively. If there are config service and admin service that are not deployed in `SHAOY` and `SHAJQ`, this default configuration will be used.
+>Note 3: In multi-cluster deployments, you often want the config service and admin service to register only with the eureka in the same room. To achieve this, you need to use the cluster field in the `ServerConfig` table, and the config service and admin service will read the `/opt/settings/server.properties` (Mac/Linux) or `C:\opt\settings\server.properties` (Windows), and if the idc has a corresponding eureka.service.url configuration, then will only register with eureka for that server room. For example, if the config service and admin service are deployed to two IDCs, `SHAOY` and `SHAJQ`, then in order to register the services in these two server rooms only with that server room, you can add two new records in the `ServerConfig` table and fill in the `SHAOY` and `SHAJQ` server room eureka addresses respectively. If there are config service and admin service that are not deployed in `SHAOY` and `SHAJQ`, this default configuration will be used.
 
 | Key                | Cluster | Value                       | Comment                      |
 | ------------------ | ------- | --------------------------- | ---------------------------- |
