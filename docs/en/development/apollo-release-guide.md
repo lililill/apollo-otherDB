@@ -86,7 +86,7 @@ Fill out the Release Note & upload the package
 
 Publish via github workflow.
 
-[https://github.com/apolloconfig/apollo/actions/workflows/release.yml](https://github.com/apolloconfig/apollo/actions/workflows/release.yml)
+[https://github.com/apolloconfig/apollo-java/actions/workflows/release.yml](https://github.com/apolloconfig/apollo-java/actions/workflows/release.yml)
 
 ![image.png](https://cdn.jsdelivr.net/gh/apolloconfig/apollo@master/doc/images/local-development/publish-sdk.png)
 
