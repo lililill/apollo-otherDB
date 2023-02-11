@@ -35,6 +35,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class PortalApplication {
 
   public static void main(String[] args) throws Exception {
+    System.setProperty("spring.session.store-type", "none");
+    System.setProperty(
+        "logging.level.com.ctrip.framework.apollo.portal.spi.oidc.OidcAuthenticationSuccessEventListener",
+        "trace");
     SpringApplication.run(PortalApplication.class, args);
   }
 }
