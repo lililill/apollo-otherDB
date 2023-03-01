@@ -15,13 +15,13 @@
 --
 DELETE FROM AccessKey;
 DELETE FROM App;
-DELETE FROM AppNamespace;
+DELETE FROM "AppNamespace";
 DELETE FROM Cluster;
-DELETE FROM namespace;
+DELETE FROM "Namespace";
 DELETE FROM grayreleaserule;
-DELETE FROM release;
+DELETE FROM "Release";
 DELETE FROM item;
-DELETE FROM releasemessage;
+DELETE FROM "ReleaseMessage";
 DELETE FROM releasehistory;
 DELETE FROM namespacelock;
 DELETE FROM `commit`;
