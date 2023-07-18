@@ -1,4 +1,4 @@
-mvn install:install-file -Dfile=apollo-common/libs/hibernate-4.dialect.jar -DgroupId=com.kingbase8.jdbc  -DartifactId=kingbase8 -Dversion=8.6.0 -Dpackaging=jar
+#mvn install:install-file -Dfile=apollo-common/libs/hibernate-4.dialect.jar -DgroupId=com.kingbase8.jdbc  -DartifactId=kingbase8 -Dversion=8.6.0 -Dpackaging=jar
 
 ./scripts/build.sh 
 mkdir ./docker_build/apollo-adminservice/apollo-adminservice
