@@ -1,3 +1,5 @@
+mvn install:install-file -Dfile=apollo-common/libs/hibernate-4.dialect.jar -DgroupId=com.kingbase8.jdbc  -DartifactId=kingbase8 -Dversion=8.6.0 -Dpackaging=jar
+
 ./scripts/build.sh 
 mkdir ./docker_build/apollo-adminservice/apollo-adminservice
 cp ./apollo-adminservice/target/apollo-adminservice-2.0.0-github.zip ./docker_build/apollo-adminservice/apollo-adminservice/
@@ -40,20 +42,20 @@ docker save -o ./apollo-configservice-kingbase8.tar apollo-configservice-kingbas
 docker save -o ./apollo-adminservice-kingbase8.tar apollo-adminservice-kingbase8:2.0.0  
 
 
-#docker run -p 8090:8090 \
-#    -e SPRING_DATASOURCE_URL="jdbc:kingbase8://192.168.1.170:54321/apolloconfigdb" \
-#    -e SPRING_DATASOURCE_USERNAME=sa -e SPRING_DATASOURCE_PASSWORD=tomtaw \
-#    -d -v /tmp/logs:/opt/logs --name apollo-adminservice apollo-adminservice-kingbase8:2.0.0
+docker run -p 8090:8090 \
+    -e SPRING_DATASOURCE_URL="jdbc:kingbase8://192.168.1.170:54321/apolloconfigdb" \
+    -e SPRING_DATASOURCE_USERNAME=sa -e SPRING_DATASOURCE_PASSWORD=tomtaw \
+    -d -v /tmp/logs:/opt/logs --name apollo-adminservice apollo-adminservice-kingbase8:2.0.0
  
-#docker run -p 8080:8080 \
-#    -e SPRING_DATASOURCE_URL="jdbc:kingbase8://192.168.1.170:54321/apolloconfigdb" \
-#    -e SPRING_DATASOURCE_USERNAME=sa -e SPRING_DATASOURCE_PASSWORD=tomtaw \
-#    -d -v /tmp/logs:/opt/logs --name apollo-configservice apollo-configservice-kingbase8:2.0.0
+docker run -p 8080:8080 \
+    -e SPRING_DATASOURCE_URL="jdbc:kingbase8://192.168.1.170:54321/apolloconfigdb" \
+    -e SPRING_DATASOURCE_USERNAME=sa -e SPRING_DATASOURCE_PASSWORD=tomtaw \
+    -d -v /tmp/logs:/opt/logs --name apollo-configservice apollo-configservice-kingbase8:2.0.0
 	
  
-#docker run -p 8070:8070 \
-#    -e SPRING_DATASOURCE_URL="jdbc:kingbase8://192.168.1.170:54321/apolloportaldb" \
-#    -e SPRING_DATASOURCE_USERNAME=sa -e SPRING_DATASOURCE_PASSWORD=tomtaw \
-#    -e APOLLO_PORTAL_ENVS=dev,pro \
-#    -e DEV_META=http://192.168.1.152:8080 -e PRO_META=http://192.168.1.152:8080 \
-#    -d -v /tmp/logs:/opt/logs --name apollo-portal apollo-portal-kingbase8:2.0.0
+docker run -p 8070:8070 \
+    -e SPRING_DATASOURCE_URL="jdbc:kingbase8://192.168.1.170:54321/apolloportaldb" \
+    -e SPRING_DATASOURCE_USERNAME=sa -e SPRING_DATASOURCE_PASSWORD=tomtaw \
+    -e APOLLO_PORTAL_ENVS=dev,pro \
+    -e DEV_META=http://192.168.1.152:8080 -e PRO_META=http://192.168.1.152:8080 \
+    -d -v /tmp/logs:/opt/logs --name apollo-portal apollo-portal-kingbase8:2.0.0

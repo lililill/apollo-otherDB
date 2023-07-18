@@ -63,8 +63,8 @@
             <groupId>com.kingbase8.jdbc</groupId>
             <artifactId>kingbase8</artifactId>
             <version>8.6.0</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/libs/kingbase8-8.6.0.jar</systemPath>
+<!--            <scope>compile</scope>-->
+<!--            <systemPath>${pom.basedir}/libs/kingbase8-8.6.0.jar</systemPath>-->
         </dependency>
 
 
@@ -103,17 +103,17 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <resources>
-            <resource>
-                <!--把libs/目录下第三方jar包打进程序中，如上面的systemPath目录下的jar-->
-                <directory>libs/</directory>
-                <includes>
-                    <include>**/*.jar</include>
-                </includes>
-                <filtering>false</filtering>
-            </resource>
-        </resources>
+<!--    <build>-->
+<!--        <resources>-->
+<!--            <resource>-->
+<!--                &lt;!&ndash;把libs/目录下第三方jar包打进程序中，如上面的systemPath目录下的jar&ndash;&gt;-->
+<!--                <directory>libs/</directory>-->
+<!--                <includes>-->
+<!--                    <include>**/*.jar</include>-->
+<!--                </includes>-->
+<!--                <filtering>false</filtering>-->
+<!--            </resource>-->
+<!--        </resources>-->
 
-    </build>
+<!--    </build>-->
 </project>
