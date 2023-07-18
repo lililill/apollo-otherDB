@@ -54,10 +54,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>mysql</groupId>-->
-<!--            <artifactId>mysql-connector-java</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>mysql</groupId>-->
+        <!--            <artifactId>mysql-connector-java</artifactId>-->
+        <!--        </dependency>-->
         <!-- 人大金仓 JDBC 驱动 -->
         <dependency>
             <groupId>com.kingbase8.jdbc</groupId>
@@ -102,4 +102,18 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <!--把libs/目录下第三方jar包打进程序中，如上面的systemPath目录下的jar-->
+                <directory>libs/</directory>
+                <includes>
+                    <include>**/*.jar</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+
+    </build>
 </project>
