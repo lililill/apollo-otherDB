@@ -29,7 +29,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "App")
 @SQLDelete(sql = "Update App set IsDeleted = 1, DeletedAt = ROUND(UNIX_TIMESTAMP(NOW(4))*1000) where Id = ?")
-@Where(clause = "isDeleted = 0")
+@Where(clause = "isDeleted = '0'")
 public class App extends BaseEntity {
 
   @NotBlank(message = "Name cannot be blank")

@@ -28,7 +28,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Favorite")
 @SQLDelete(sql = "Update Favorite set IsDeleted = 1, DeletedAt = ROUND(UNIX_TIMESTAMP(NOW(4))*1000) where Id = ?")
-@Where(clause = "isDeleted = 0")
+@Where(clause = "isDeleted = '0'")
 public class Favorite extends BaseEntity {
 
   @Column(name = "AppId", nullable = false)

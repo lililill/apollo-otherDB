@@ -31,7 +31,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "RolePermission")
 @SQLDelete(sql = "Update RolePermission set IsDeleted = 1, DeletedAt = ROUND(UNIX_TIMESTAMP(NOW(4))*1000) where Id = ?")
-@Where(clause = "isDeleted = 0")
+@Where(clause = "isDeleted = '0'")
 public class RolePermission extends BaseEntity {
   @Column(name = "RoleId", nullable = false)
   private long roleId;
