@@ -1,426 +1,439 @@
---
--- Copyright 2022 Apollo Authors
---
--- Licensed under the Apache License, Version 2.0 (the "License");
--- you may not use this file except in compliance with the License.
--- You may obtain a copy of the License at
---
--- http://www.apache.org/licenses/LICENSE-2.0
---
--- Unless required by applicable law or agreed to in writing, software
--- distributed under the License is distributed on an "AS IS" BASIS,
--- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
--- See the License for the specific language governing permissions and
--- limitations under the License.
---
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-# Create Database
-# ------------------------------------------------------------
-CREATE DATABASE IF NOT EXISTS ApolloConfigDB DEFAULT CHARACTER SET = utf8mb4;
-
-Use ApolloConfigDB;
-
-# Dump of table app
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `App`;
-
-CREATE TABLE `App` (
-  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `AppId` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'AppID',
-  `Name` varchar(500) NOT NULL DEFAULT 'default' COMMENT '应用名',
-  `OrgId` varchar(32) NOT NULL DEFAULT 'default' COMMENT '部门Id',
-  `OrgName` varchar(64) NOT NULL DEFAULT 'default' COMMENT '部门名字',
-  `OwnerName` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'ownerName',
-  `OwnerEmail` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'ownerEmail',
-  `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-  `DeletedAt` BIGINT(20) NOT NULL DEFAULT '0' COMMENT 'Delete timestamp based on milliseconds',
-  `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-  `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `UK_AppId_DeletedAt` (`AppId`,`DeletedAt`),
-  KEY `DataChange_LastTime` (`DataChange_LastTime`),
-  KEY `IX_Name` (`Name`(191))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='应用表';
-
-
-
-# Dump of table appnamespace
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `AppNamespace`;
-
-CREATE TABLE `AppNamespace` (
-  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-  `Name` varchar(32) NOT NULL DEFAULT '' COMMENT 'namespace名字，注意，需要全局唯一',
-  `AppId` varchar(64) NOT NULL DEFAULT '' COMMENT 'app id',
-  `Format` varchar(32) NOT NULL DEFAULT 'properties' COMMENT 'namespace的format类型',
-  `IsPublic` bit(1) NOT NULL DEFAULT b'0' COMMENT 'namespace是否为公共',
-  `Comment` varchar(64) NOT NULL DEFAULT '' COMMENT '注释',
-  `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-  `DeletedAt` BIGINT(20) NOT NULL DEFAULT '0' COMMENT 'Delete timestamp based on milliseconds',
-  `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-  `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `UK_AppId_Name_DeletedAt` (`AppId`,`Name`,`DeletedAt`),
-  KEY `Name_AppId` (`Name`,`AppId`),
-  KEY `DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='应用namespace定义';
-
-
-
-# Dump of table audit
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `Audit`;
-
-CREATE TABLE `Audit` (
-  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `EntityName` varchar(50) NOT NULL DEFAULT 'default' COMMENT '表名',
-  `EntityId` int(10) unsigned DEFAULT NULL COMMENT '记录ID',
-  `OpName` varchar(50) NOT NULL DEFAULT 'default' COMMENT '操作类型',
-  `Comment` varchar(500) DEFAULT NULL COMMENT '备注',
-  `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-  `DeletedAt` BIGINT(20) NOT NULL DEFAULT '0' COMMENT 'Delete timestamp based on milliseconds',
-  `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-  `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`Id`),
-  KEY `DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='日志审计表';
-
-
-
-# Dump of table cluster
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `Cluster`;
-
-CREATE TABLE `Cluster` (
-  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-  `Name` varchar(32) NOT NULL DEFAULT '' COMMENT '集群名字',
-  `AppId` varchar(64) NOT NULL DEFAULT '' COMMENT 'App id',
-  `ParentClusterId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父cluster',
-  `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-  `DeletedAt` BIGINT(20) NOT NULL DEFAULT '0' COMMENT 'Delete timestamp based on milliseconds',
-  `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-  `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `UK_AppId_Name_DeletedAt` (`AppId`,`Name`,`DeletedAt`),
-  KEY `IX_ParentClusterId` (`ParentClusterId`),
-  KEY `DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='集群';
-
-
-
-# Dump of table commit
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `Commit`;
-
-CREATE TABLE `Commit` (
-  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `ChangeSets` longtext NOT NULL COMMENT '修改变更集',
-  `AppId` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'AppID',
-  `ClusterName` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'ClusterName',
-  `NamespaceName` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'namespaceName',
-  `Comment` varchar(500) DEFAULT NULL COMMENT '备注',
-  `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-  `DeletedAt` BIGINT(20) NOT NULL DEFAULT '0' COMMENT 'Delete timestamp based on milliseconds',
-  `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-  `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`Id`),
-  KEY `DataChange_LastTime` (`DataChange_LastTime`),
-  KEY `AppId` (`AppId`(191)),
-  KEY `ClusterName` (`ClusterName`(191)),
-  KEY `NamespaceName` (`NamespaceName`(191))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='commit 历史表';
-
-# Dump of table grayreleaserule
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `GrayReleaseRule`;
-
-CREATE TABLE `GrayReleaseRule` (
-  `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `AppId` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'AppID',
-  `ClusterName` varchar(32) NOT NULL DEFAULT 'default' COMMENT 'Cluster Name',
-  `NamespaceName` varchar(32) NOT NULL DEFAULT 'default' COMMENT 'Namespace Name',
-  `BranchName` varchar(32) NOT NULL DEFAULT 'default' COMMENT 'branch name',
-  `Rules` varchar(16000) DEFAULT '[]' COMMENT '灰度规则',
-  `ReleaseId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '灰度对应的release',
-  `BranchStatus` tinyint(2) DEFAULT '1' COMMENT '灰度分支状态: 0:删除分支,1:正在使用的规则 2：全量发布',
-  `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-  `DeletedAt` BIGINT(20) NOT NULL DEFAULT '0' COMMENT 'Delete timestamp based on milliseconds',
-  `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-  `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`Id`),
-  KEY `DataChange_LastTime` (`DataChange_LastTime`),
-  KEY `IX_Namespace` (`AppId`,`ClusterName`,`NamespaceName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='灰度规则表';
-
-
-# Dump of table instance
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `Instance`;
-
-CREATE TABLE `Instance` (
-  `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增Id',
-  `AppId` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'AppID',
-  `ClusterName` varchar(32) NOT NULL DEFAULT 'default' COMMENT 'ClusterName',
-  `DataCenter` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Data Center Name',
-  `Ip` varchar(32) NOT NULL DEFAULT '' COMMENT 'instance ip',
-  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `DataChange_LastTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `IX_UNIQUE_KEY` (`AppId`,`ClusterName`,`Ip`,`DataCenter`),
-  KEY `IX_IP` (`Ip`),
-  KEY `IX_DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='使用配置的应用实例';
-
-
-
-# Dump of table instanceconfig
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `InstanceConfig`;
-
-CREATE TABLE `InstanceConfig` (
-  `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增Id',
-  `InstanceId` int(11) unsigned DEFAULT NULL COMMENT 'Instance Id',
-  `ConfigAppId` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Config App Id',
-  `ConfigClusterName` varchar(32) NOT NULL DEFAULT 'default' COMMENT 'Config Cluster Name',
-  `ConfigNamespaceName` varchar(32) NOT NULL DEFAULT 'default' COMMENT 'Config Namespace Name',
-  `ReleaseKey` varchar(64) NOT NULL DEFAULT '' COMMENT '发布的Key',
-  `ReleaseDeliveryTime` timestamp NULL DEFAULT NULL COMMENT '配置获取时间',
-  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `DataChange_LastTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `IX_UNIQUE_KEY` (`InstanceId`,`ConfigAppId`,`ConfigNamespaceName`),
-  KEY `IX_ReleaseKey` (`ReleaseKey`),
-  KEY `IX_DataChange_LastTime` (`DataChange_LastTime`),
-  KEY `IX_Valid_Namespace` (`ConfigAppId`,`ConfigClusterName`,`ConfigNamespaceName`,`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='应用实例的配置信息';
-
-
-
-# Dump of table item
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `Item`;
-
-CREATE TABLE `Item` (
-  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增Id',
-  `NamespaceId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '集群NamespaceId',
-  `Key` varchar(128) NOT NULL DEFAULT 'default' COMMENT '配置项Key',
-  `Value` longtext NOT NULL COMMENT '配置项值',
-  `Comment` varchar(1024) DEFAULT '' COMMENT '注释',
-  `LineNum` int(10) unsigned DEFAULT '0' COMMENT '行号',
-  `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-  `DeletedAt` BIGINT(20) NOT NULL DEFAULT '0' COMMENT 'Delete timestamp based on milliseconds',
-  `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-  `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`Id`),
-  KEY `IX_GroupId` (`NamespaceId`),
-  KEY `DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='配置项目';
-
-
-
-# Dump of table namespace
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `Namespace`;
-
-CREATE TABLE `Namespace` (
-  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-  `AppId` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'AppID',
-  `ClusterName` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'Cluster Name',
-  `NamespaceName` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'Namespace Name',
-  `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-  `DeletedAt` BIGINT(20) NOT NULL DEFAULT '0' COMMENT 'Delete timestamp based on milliseconds',
-  `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-  `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `UK_AppId_ClusterName_NamespaceName_DeletedAt` (`AppId`(191),`ClusterName`(191),`NamespaceName`(191),`DeletedAt`),
-  KEY `DataChange_LastTime` (`DataChange_LastTime`),
-  KEY `IX_NamespaceName` (`NamespaceName`(191))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='命名空间';
-
-
-
-# Dump of table namespacelock
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `NamespaceLock`;
-
-CREATE TABLE `NamespaceLock` (
-  `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
-  `NamespaceId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '集群NamespaceId',
-  `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-  `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  `IsDeleted` bit(1) DEFAULT b'0' COMMENT '软删除',
-  `DeletedAt` BIGINT(20) NOT NULL DEFAULT '0' COMMENT 'Delete timestamp based on milliseconds',
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `UK_NamespaceId_DeletedAt` (`NamespaceId`,`DeletedAt`),
-  KEY `DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='namespace的编辑锁';
-
-
-
-# Dump of table release
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `Release`;
-
-CREATE TABLE `Release` (
-  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-  `ReleaseKey` varchar(64) NOT NULL DEFAULT '' COMMENT '发布的Key',
-  `Name` varchar(64) NOT NULL DEFAULT 'default' COMMENT '发布名字',
-  `Comment` varchar(256) DEFAULT NULL COMMENT '发布说明',
-  `AppId` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'AppID',
-  `ClusterName` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'ClusterName',
-  `NamespaceName` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'namespaceName',
-  `Configurations` longtext NOT NULL COMMENT '发布配置',
-  `IsAbandoned` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否废弃',
-  `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-  `DeletedAt` BIGINT(20) NOT NULL DEFAULT '0' COMMENT 'Delete timestamp based on milliseconds',
-  `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-  `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `UK_ReleaseKey_DeletedAt` (`ReleaseKey`,`DeletedAt`),
-  KEY `AppId_ClusterName_GroupName` (`AppId`(191),`ClusterName`(191),`NamespaceName`(191)),
-  KEY `DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='发布';
-
-
-# Dump of table releasehistory
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `ReleaseHistory`;
-
-CREATE TABLE `ReleaseHistory` (
-  `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增Id',
-  `AppId` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'AppID',
-  `ClusterName` varchar(32) NOT NULL DEFAULT 'default' COMMENT 'ClusterName',
-  `NamespaceName` varchar(32) NOT NULL DEFAULT 'default' COMMENT 'namespaceName',
-  `BranchName` varchar(32) NOT NULL DEFAULT 'default' COMMENT '发布分支名',
-  `ReleaseId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '关联的Release Id',
-  `PreviousReleaseId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '前一次发布的ReleaseId',
-  `Operation` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '发布类型，0: 普通发布，1: 回滚，2: 灰度发布，3: 灰度规则更新，4: 灰度合并回主分支发布，5: 主分支发布灰度自动发布，6: 主分支回滚灰度自动发布，7: 放弃灰度',
-  `OperationContext` longtext NOT NULL COMMENT '发布上下文信息',
-  `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-  `DeletedAt` BIGINT(20) NOT NULL DEFAULT '0' COMMENT 'Delete timestamp based on milliseconds',
-  `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-  `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`Id`),
-  KEY `IX_Namespace` (`AppId`,`ClusterName`,`NamespaceName`,`BranchName`),
-  KEY `IX_ReleaseId` (`ReleaseId`),
-  KEY `IX_DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='发布历史';
-
-
-# Dump of table releasemessage
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `ReleaseMessage`;
-
-CREATE TABLE `ReleaseMessage` (
-  `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-  `Message` varchar(1024) NOT NULL DEFAULT '' COMMENT '发布的消息内容',
-  `DataChange_LastTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`Id`),
-  KEY `DataChange_LastTime` (`DataChange_LastTime`),
-  KEY `IX_Message` (`Message`(191))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='发布消息';
-
-
-
-# Dump of table serverconfig
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `ServerConfig`;
-
-CREATE TABLE `ServerConfig` (
-  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增Id',
-  `Key` varchar(64) NOT NULL DEFAULT 'default' COMMENT '配置项Key',
-  `Cluster` varchar(32) NOT NULL DEFAULT 'default' COMMENT '配置对应的集群，default为不针对特定的集群',
-  `Value` varchar(2048) NOT NULL DEFAULT 'default' COMMENT '配置项值',
-  `Comment` varchar(1024) DEFAULT '' COMMENT '注释',
-  `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-  `DeletedAt` BIGINT(20) NOT NULL DEFAULT '0' COMMENT 'Delete timestamp based on milliseconds',
-  `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-  `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `UK_Key_Cluster_DeletedAt` (`Key`,`Cluster`,`DeletedAt`),
-  KEY `DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='配置服务自身配置';
-
-# Dump of table accesskey
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `AccessKey`;
-
-CREATE TABLE `AccessKey` (
-  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-  `AppId` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'AppID',
-  `Secret` varchar(128) NOT NULL DEFAULT '' COMMENT 'Secret',
-  `IsEnabled` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: enabled, 0: disabled',
-  `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-  `DeletedAt` BIGINT(20) NOT NULL DEFAULT '0' COMMENT 'Delete timestamp based on milliseconds',
-  `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-  `DataChange_LastTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `UK_AppId_Secret_DeletedAt` (`AppId`,`Secret`,`DeletedAt`),
-  KEY `DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='访问密钥';
-
-# Config
-# ------------------------------------------------------------
-INSERT INTO `ServerConfig` (`Key`, `Cluster`, `Value`, `Comment`)
-VALUES
-    ('eureka.service.url', 'default', 'http://localhost:8080/eureka/', 'Eureka服务Url，多个service以英文逗号分隔'),
-    ('namespace.lock.switch', 'default', 'false', '一次发布只能有一个人修改开关'),
-    ('item.key.length.limit', 'default', '128', 'item key 最大长度限制'),
-    ('item.value.length.limit', 'default', '20000', 'item value最大长度限制'),
-    ('config-service.cache.enabled', 'default', 'false', 'ConfigService是否开启缓存，开启后能提高性能，但是会增大内存消耗！');
-
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- "public"."AccessKey" definition
+
+-- Drop table
+
+-- DROP TABLE "public"."AccessKey";
+
+CREATE TABLE "public"."AccessKey" (
+	"Id" bigint AUTO_INCREMENT,
+	"AppId" character varying(500 char) NOT NULL DEFAULT 'default'::varchar,
+	"Secret" character varying(128 char) NOT NULL DEFAULT NULL::varchar,
+	"IsEnabled" integer NOT NULL DEFAULT 0,
+	"IsDeleted" integer NOT NULL DEFAULT 0,
+	"DeletedAt" bigint NOT NULL DEFAULT 0,
+	"DataChange_CreatedBy" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"DataChange_CreatedTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"DataChange_LastModifiedBy" character varying(64 char) NULL DEFAULT NULL::varchar,
+	"DataChange_LastTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "PRIMARY_CDB19436" PRIMARY KEY (Id),
+	CONSTRAINT "UK_AppId_Secret_DeletedAt_5E6B3CBD" UNIQUE (AppId, Secret, DeletedAt)
+);
+CREATE INDEX DataChange_LastTime_743FB260 ON public.AccessKey USING btree (DataChange_LastTime);
+
+
+-- "public"."App" definition
+
+-- Drop table
+
+-- DROP TABLE "public"."App";
+
+CREATE TABLE "public"."App" (
+	"Id" bigint AUTO_INCREMENT,
+	"AppId" character varying(500 char) NOT NULL DEFAULT 'default'::varchar,
+	"Name" character varying(500 char) NOT NULL DEFAULT 'default'::varchar,
+	"OrgId" character varying(32 char) NOT NULL DEFAULT 'default'::varchar,
+	"OrgName" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"OwnerName" character varying(500 char) NOT NULL DEFAULT 'default'::varchar,
+	"OwnerEmail" character varying(500 char) NOT NULL DEFAULT 'default'::varchar,
+	"IsDeleted" integer NOT NULL DEFAULT 0,
+	"DeletedAt" bigint NOT NULL DEFAULT 0,
+	"DataChange_CreatedBy" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"DataChange_CreatedTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"DataChange_LastModifiedBy" character varying(64 char) NULL DEFAULT NULL::varchar,
+	"DataChange_LastTime" timestamp(0) without time zone NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "PRIMARY_E21D63FC" PRIMARY KEY (Id),
+	CONSTRAINT "UK_AppId_DeletedAt_3DEBF313" UNIQUE (AppId, DeletedAt)
+);
+CREATE INDEX DataChange_LastTime_C007005A ON public.App USING btree (DataChange_LastTime);
+CREATE INDEX IX_Name_EB95B6C ON public.App USING btree (Name);
+
+
+-- "public"."AppNamespace" definition
+
+-- Drop table
+
+-- DROP TABLE "public"."AppNamespace";
+
+CREATE TABLE "public"."AppNamespace" (
+	"Id" bigint AUTO_INCREMENT,
+	"Name" character varying(32 char) NOT NULL DEFAULT NULL::varchar,
+	"AppId" character varying(64 char) NOT NULL DEFAULT NULL::varchar,
+	"Format" character varying(32 char) NOT NULL DEFAULT 'properties'::varchar,
+	"IsPublic" integer NOT NULL DEFAULT 0,
+	"Comment" character varying(64 char) NOT NULL DEFAULT NULL::varchar,
+	"IsDeleted" integer NOT NULL DEFAULT 0,
+	"DeletedAt" bigint NOT NULL DEFAULT 0,
+	"DataChange_CreatedBy" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"DataChange_CreatedTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"DataChange_LastModifiedBy" character varying(64 char) NULL DEFAULT NULL::varchar,
+	"DataChange_LastTime" timestamp(0) without time zone NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "PRIMARY_9906B455" PRIMARY KEY (Id),
+	CONSTRAINT "UK_AppId_Name_DeletedAt_DE2CC392" UNIQUE (AppId, Name, DeletedAt)
+);
+CREATE INDEX DataChange_LastTime_2F675AA1 ON public.AppNamespace USING btree (DataChange_LastTime);
+CREATE INDEX Name_AppId_B47ED639 ON public.AppNamespace USING btree (Name, AppId);
+
+
+-- "public"."Audit" definition
+
+-- Drop table
+
+-- DROP TABLE "public"."Audit";
+
+CREATE TABLE "public"."Audit" (
+	"Id" bigint AUTO_INCREMENT,
+	"EntityName" character varying(50 char) NOT NULL DEFAULT 'default'::varchar,
+	"EntityId" bigint NULL,
+	"OpName" character varying(50 char) NOT NULL DEFAULT 'default'::varchar,
+	"Comment" character varying(500 char) NULL,
+	"IsDeleted" integer NOT NULL DEFAULT 0,
+	"DeletedAt" bigint NOT NULL DEFAULT 0,
+	"DataChange_CreatedBy" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"DataChange_CreatedTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"DataChange_LastModifiedBy" character varying(64 char) NULL DEFAULT NULL::varchar,
+	"DataChange_LastTime" timestamp(0) without time zone NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "PRIMARY_F2E059B6" PRIMARY KEY (Id)
+);
+CREATE INDEX DataChange_LastTime_7C38DCE0 ON public.Audit USING btree (DataChange_LastTime);
+
+
+-- "public"."Cluster" definition
+
+-- Drop table
+
+-- DROP TABLE "public"."Cluster";
+
+CREATE TABLE "public"."Cluster" (
+	"Id" bigint AUTO_INCREMENT,
+	"Name" character varying(32 char) NOT NULL DEFAULT NULL::varchar,
+	"AppId" character varying(64 char) NOT NULL DEFAULT NULL::varchar,
+	"ParentClusterId" bigint NOT NULL DEFAULT 0,
+	"IsDeleted" integer NOT NULL DEFAULT 0,
+	"DeletedAt" bigint NOT NULL DEFAULT 0,
+	"DataChange_CreatedBy" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"DataChange_CreatedTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"DataChange_LastModifiedBy" character varying(64 char) NULL DEFAULT NULL::varchar,
+	"DataChange_LastTime" timestamp(0) without time zone NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "PRIMARY_51F39D5" PRIMARY KEY (Id),
+	CONSTRAINT "UK_AppId_Name_DeletedAt_4C43E912" UNIQUE (AppId, Name, DeletedAt)
+);
+CREATE INDEX DataChange_LastTime_65CEC521 ON public.Cluster USING btree (DataChange_LastTime);
+CREATE INDEX IX_ParentClusterId_7248B867 ON public.Cluster USING btree (ParentClusterId);
+
+
+-- "public"."Commit" definition
+
+-- Drop table
+
+-- DROP TABLE "public"."Commit";
+
+CREATE TABLE "public"."Commit" (
+	"Id" bigint AUTO_INCREMENT,
+	"ChangeSets" text NOT NULL,
+	"AppId" character varying(500 char) NOT NULL DEFAULT 'default'::varchar,
+	"ClusterName" character varying(500 char) NOT NULL DEFAULT 'default'::varchar,
+	"NamespaceName" character varying(500 char) NOT NULL DEFAULT 'default'::varchar,
+	"Comment" character varying(500 char) NULL,
+	"IsDeleted" integer NOT NULL DEFAULT 0,
+	"DeletedAt" bigint NOT NULL DEFAULT 0,
+	"DataChange_CreatedBy" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"DataChange_CreatedTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"DataChange_LastModifiedBy" character varying(64 char) NULL DEFAULT NULL::varchar,
+	"DataChange_LastTime" timestamp(0) without time zone NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "PRIMARY_694B0B52" PRIMARY KEY (Id)
+);
+CREATE INDEX AppId_EDCE3B24 ON public.Commit USING btree (AppId);
+CREATE INDEX ClusterName_5E2E5644 ON public.Commit USING btree (ClusterName);
+CREATE INDEX DataChange_LastTime_A1F060C4 ON public.Commit USING btree (DataChange_LastTime);
+CREATE INDEX NamespaceName_6E25E6E4 ON public.Commit USING btree (NamespaceName);
+
+
+-- "public"."GrayReleaseRule" definition
+
+-- Drop table
+
+-- DROP TABLE "public"."GrayReleaseRule";
+
+CREATE TABLE "public"."GrayReleaseRule" (
+	"Id" bigint AUTO_INCREMENT,
+	"AppId" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"ClusterName" character varying(32 char) NOT NULL DEFAULT 'default'::varchar,
+	"NamespaceName" character varying(32 char) NOT NULL DEFAULT 'default'::varchar,
+	"BranchName" character varying(32 char) NOT NULL DEFAULT 'default'::varchar,
+	"Rules" text NULL DEFAULT '[]'::text,
+	"ReleaseId" bigint NOT NULL DEFAULT 0,
+	"BranchStatus" integer NULL DEFAULT 1,
+	"IsDeleted" integer NOT NULL DEFAULT 0,
+	"DeletedAt" bigint NOT NULL DEFAULT 0,
+	"DataChange_CreatedBy" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"DataChange_CreatedTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"DataChange_LastModifiedBy" character varying(64 char) NULL DEFAULT NULL::varchar,
+	"DataChange_LastTime" timestamp(0) without time zone NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "PRIMARY_AF6BA51B" PRIMARY KEY (Id)
+);
+CREATE INDEX DataChange_LastTime_49F5279B ON public.GrayReleaseRule USING btree (DataChange_LastTime);
+CREATE INDEX IX_Namespace_7EE2727B ON public.GrayReleaseRule USING btree (AppId, ClusterName, NamespaceName);
+
+
+-- "public"."Instance" definition
+
+-- Drop table
+
+-- DROP TABLE "public"."Instance";
+
+CREATE TABLE "public"."Instance" (
+	"Id" bigint AUTO_INCREMENT,
+	"AppId" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"ClusterName" character varying(32 char) NOT NULL DEFAULT 'default'::varchar,
+	"DataCenter" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"Ip" character varying(32 char) NOT NULL DEFAULT NULL::varchar,
+	"DataChange_CreatedTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"DataChange_LastTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "IX_UNIQUE_KEY_2550120B" UNIQUE (AppId, ClusterName, Ip, DataCenter),
+	CONSTRAINT "PRIMARY_3BD172B0" PRIMARY KEY (Id)
+);
+CREATE INDEX IX_DataChange_LastTime_BB5FB862 ON public.Instance USING btree (DataChange_LastTime);
+CREATE INDEX IX_IP_E0B74CF8 ON public.Instance USING btree (Ip);
+
+
+-- "public"."InstanceConfig" definition
+
+-- Drop table
+
+-- DROP TABLE "public"."InstanceConfig";
+
+CREATE TABLE "public"."InstanceConfig" (
+	"Id" bigint AUTO_INCREMENT,
+	"InstanceId" bigint NULL,
+	"ConfigAppId" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"ConfigClusterName" character varying(32 char) NOT NULL DEFAULT 'default'::varchar,
+	"ConfigNamespaceName" character varying(32 char) NOT NULL DEFAULT 'default'::varchar,
+	"ReleaseKey" character varying(64 char) NOT NULL DEFAULT NULL::varchar,
+	"ReleaseDeliveryTime" timestamp(0) without time zone NULL,
+	"DataChange_CreatedTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"DataChange_LastTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "IX_UNIQUE_KEY_C15CA8A1" UNIQUE (InstanceId, ConfigAppId, ConfigNamespaceName),
+	CONSTRAINT "PRIMARY_EB1C4252" PRIMARY KEY (Id)
+);
+CREATE INDEX IX_DataChange_LastTime_D6338004 ON public.InstanceConfig USING btree (DataChange_LastTime);
+CREATE INDEX IX_ReleaseKey_DC9F17BC ON public.InstanceConfig USING btree (ReleaseKey);
+CREATE INDEX IX_Valid_Namespace_CE304898 ON public.InstanceConfig USING btree (ConfigAppId, ConfigClusterName, ConfigNamespaceName, DataChange_LastTime);
+
+
+-- "public"."Item" definition
+
+-- Drop table
+
+-- DROP TABLE "public"."Item";
+
+CREATE TABLE "public"."Item" (
+	"Id" bigint AUTO_INCREMENT,
+	"NamespaceId" bigint NOT NULL DEFAULT 0,
+	"Key" character varying(128 char) NOT NULL DEFAULT 'default'::varchar,
+	"Value" text NOT NULL,
+	"Comment" character varying(1024 char) NULL DEFAULT NULL::varchar,
+	"LineNum" bigint NULL DEFAULT 0,
+	"IsDeleted" integer NOT NULL DEFAULT 0,
+	"DeletedAt" bigint NOT NULL DEFAULT 0,
+	"DataChange_CreatedBy" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"DataChange_CreatedTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"DataChange_LastModifiedBy" character varying(64 char) NULL DEFAULT NULL::varchar,
+	"DataChange_LastTime" timestamp(0) without time zone NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "PRIMARY_83F2AD2E" PRIMARY KEY (Id)
+);
+CREATE INDEX DataChange_LastTime_E8FBDC68 ON public.Item USING btree (DataChange_LastTime);
+CREATE INDEX IX_GroupId_71BF7EDC ON public.Item USING btree (NamespaceId);
+
+
+-- "public"."Namespace" definition
+
+-- Drop table
+
+-- DROP TABLE "public"."Namespace";
+
+CREATE TABLE "public"."Namespace" (
+	"Id" bigint AUTO_INCREMENT,
+	"AppId" character varying(500 char) NOT NULL DEFAULT 'default'::varchar,
+	"ClusterName" character varying(500 char) NOT NULL DEFAULT 'default'::varchar,
+	"NamespaceName" character varying(500 char) NOT NULL DEFAULT 'default'::varchar,
+	"IsDeleted" integer NOT NULL DEFAULT 0,
+	"DeletedAt" bigint NOT NULL DEFAULT 0,
+	"DataChange_CreatedBy" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"DataChange_CreatedTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"DataChange_LastModifiedBy" character varying(64 char) NULL DEFAULT NULL::varchar,
+	"DataChange_LastTime" timestamp(0) without time zone NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "PRIMARY_91682336" PRIMARY KEY (Id),
+	CONSTRAINT "UK_AppId_ClusterName_NamespaceName_DeletedAt_DD5" UNIQUE (AppId, ClusterName, NamespaceName, DeletedAt)
+);
+CREATE INDEX DataChange_LastTime_8278360 ON public.Namespace USING btree (DataChange_LastTime);
+CREATE INDEX IX_NamespaceName_B2846D08 ON public.Namespace USING btree (NamespaceName);
+
+
+-- "public"."NamespaceLock" definition
+
+-- Drop table
+
+-- DROP TABLE "public"."NamespaceLock";
+
+CREATE TABLE "public"."NamespaceLock" (
+	"Id" bigint AUTO_INCREMENT,
+	"NamespaceId" bigint NOT NULL DEFAULT 0,
+	"DataChange_CreatedBy" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"DataChange_CreatedTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"DataChange_LastModifiedBy" character varying(64 char) NULL DEFAULT NULL::varchar,
+	"DataChange_LastTime" timestamp(0) without time zone NULL DEFAULT CURRENT_TIMESTAMP,
+	"IsDeleted" integer NULL DEFAULT 0,
+	"DeletedAt" bigint NOT NULL DEFAULT 0,
+	CONSTRAINT "PRIMARY_C1165101" PRIMARY KEY (Id),
+	CONSTRAINT "UK_NamespaceId_DeletedAt_8CE3CD98" UNIQUE (NamespaceId, DeletedAt)
+);
+CREATE INDEX DataChange_LastTime_C2508D75 ON public.NamespaceLock USING btree (DataChange_LastTime);
+
+
+-- "public"."Release" definition
+
+-- Drop table
+
+-- DROP TABLE "public"."Release";
+
+CREATE TABLE "public"."Release" (
+	"Id" bigint AUTO_INCREMENT,
+	"ReleaseKey" character varying(64 char) NOT NULL DEFAULT NULL::varchar,
+	"Name" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"Comment" character varying(256 char) NULL,
+	"AppId" character varying(500 char) NOT NULL DEFAULT 'default'::varchar,
+	"ClusterName" character varying(500 char) NOT NULL DEFAULT 'default'::varchar,
+	"NamespaceName" character varying(500 char) NOT NULL DEFAULT 'default'::varchar,
+	"Configurations" text NOT NULL,
+	"IsAbandoned" integer NOT NULL DEFAULT 0,
+	"IsDeleted" integer NOT NULL DEFAULT 0,
+	"DeletedAt" bigint NOT NULL DEFAULT 0,
+	"DataChange_CreatedBy" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"DataChange_CreatedTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"DataChange_LastModifiedBy" character varying(64 char) NULL DEFAULT NULL::varchar,
+	"DataChange_LastTime" timestamp(0) without time zone NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "PRIMARY_F7D995E2" PRIMARY KEY (Id),
+	CONSTRAINT "UK_ReleaseKey_DeletedAt_F480B233" UNIQUE (ReleaseKey, DeletedAt)
+);
+CREATE INDEX AppId_ClusterName_GroupName_61CE7C50 ON public.Release USING btree (AppId, ClusterName, NamespaceName);
+CREATE INDEX DataChange_LastTime_7BC6A034 ON public.Release USING btree (DataChange_LastTime);
+
+
+-- "public"."ReleaseHistory" definition
+
+-- Drop table
+
+-- DROP TABLE "public"."ReleaseHistory";
+
+CREATE TABLE "public"."ReleaseHistory" (
+	"Id" bigint AUTO_INCREMENT,
+	"AppId" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"ClusterName" character varying(32 char) NOT NULL DEFAULT 'default'::varchar,
+	"NamespaceName" character varying(32 char) NOT NULL DEFAULT 'default'::varchar,
+	"BranchName" character varying(32 char) NOT NULL DEFAULT 'default'::varchar,
+	"ReleaseId" bigint NOT NULL DEFAULT 0,
+	"PreviousReleaseId" bigint NOT NULL DEFAULT 0,
+	"Operation" smallint NOT NULL DEFAULT 0,
+	"OperationContext" text NOT NULL,
+	"IsDeleted" integer NOT NULL DEFAULT 0,
+	"DeletedAt" bigint NOT NULL DEFAULT 0,
+	"DataChange_CreatedBy" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"DataChange_CreatedTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"DataChange_LastModifiedBy" character varying(64 char) NULL DEFAULT NULL::varchar,
+	"DataChange_LastTime" timestamp(0) without time zone NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "PRIMARY_1956E4A8" PRIMARY KEY (Id)
+);
+CREATE INDEX IX_DataChange_LastTime_67DF4A5A ON public.ReleaseHistory USING btree (DataChange_LastTime);
+CREATE INDEX IX_Namespace_7002504 ON public.ReleaseHistory USING btree (AppId, ClusterName, NamespaceName, BranchName);
+CREATE INDEX IX_ReleaseId_4FF892FA ON public.ReleaseHistory USING btree (ReleaseId);
+
+
+-- "public"."ReleaseMessage" definition
+
+-- Drop table
+
+-- DROP TABLE "public"."ReleaseMessage";
+
+CREATE TABLE "public"."ReleaseMessage" (
+	"Id" bigint AUTO_INCREMENT,
+	"Message" character varying(1024 char) NOT NULL DEFAULT NULL::varchar,
+	"DataChange_LastTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "PRIMARY_8BBABA1B" PRIMARY KEY (Id)
+);
+CREATE INDEX DataChange_LastTime_E1A329B ON public.ReleaseMessage USING btree (DataChange_LastTime);
+CREATE INDEX IX_Message_BD8E7B2D ON public.ReleaseMessage USING btree (Message);
+
+
+-- "public"."ServerConfig" definition
+
+-- Drop table
+
+-- DROP TABLE "public"."ServerConfig";
+
+CREATE TABLE "public"."ServerConfig" (
+	"Id" bigint AUTO_INCREMENT,
+	"Key" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"Cluster" character varying(32 char) NOT NULL DEFAULT 'default'::varchar,
+	"Value" character varying(2048 char) NOT NULL DEFAULT 'default'::varchar,
+	"Comment" character varying(1024 char) NULL DEFAULT NULL::varchar,
+	"IsDeleted" integer NOT NULL DEFAULT 0,
+	"DeletedAt" bigint NOT NULL DEFAULT 0,
+	"DataChange_CreatedBy" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"DataChange_CreatedTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"DataChange_LastModifiedBy" character varying(64 char) NULL DEFAULT NULL::varchar,
+	"DataChange_LastTime" timestamp(0) without time zone NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "PRIMARY_81230E80" PRIMARY KEY (Id),
+	CONSTRAINT "UK_Key_Cluster_DeletedAt_63B6F937" UNIQUE (Key, Cluster, DeletedAt)
+);
+CREATE INDEX DataChange_LastTime_DE221456 ON public.ServerConfig USING btree (DataChange_LastTime);
+
+
+
+INSERT INTO "public"."AccessKey"
+("AppId", "Secret", "IsEnabled", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
+VALUES('default'::varchar, NULL::varchar, 0, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
+INSERT INTO "public"."App"
+("AppId", "Name", "OrgId", "OrgName", "OwnerName", "OwnerEmail", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
+VALUES('default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
+INSERT INTO "public"."AppNamespace"
+("Name", "AppId", "Format", "IsPublic", "Comment", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
+VALUES(NULL::varchar, NULL::varchar, 'properties'::varchar, 0, NULL::varchar, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
+INSERT INTO "public"."Audit"
+("EntityName", "EntityId", "OpName", "Comment", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
+VALUES('default'::varchar, 0, 'default'::varchar, '', 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
+INSERT INTO "public"."Cluster"
+("Name", "AppId", "ParentClusterId", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
+VALUES(NULL::varchar, NULL::varchar, 0, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
+INSERT INTO "public"."Commit"
+("ChangeSets", "AppId", "ClusterName", "NamespaceName", "Comment", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
+VALUES('', 'default'::varchar, 'default'::varchar, 'default'::varchar, '', 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
+INSERT INTO "public"."GrayReleaseRule"
+("AppId", "ClusterName", "NamespaceName", "BranchName", "Rules", "ReleaseId", "BranchStatus", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
+VALUES('default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, '[]'::text, 0, 1, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
+INSERT INTO "public"."Instance"
+("AppId", "ClusterName", "DataCenter", "Ip", "DataChange_CreatedTime", "DataChange_LastTime")
+VALUES('default'::varchar, 'default'::varchar, 'default'::varchar, NULL::varchar, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO "public"."InstanceConfig"
+("InstanceId", "ConfigAppId", "ConfigClusterName", "ConfigNamespaceName", "ReleaseKey", "ReleaseDeliveryTime", "DataChange_CreatedTime", "DataChange_LastTime")
+VALUES(0, 'default'::varchar, 'default'::varchar, 'default'::varchar, NULL::varchar, '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO "public"."Item"
+("NamespaceId", "Key", "Value", "Comment", "LineNum", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
+VALUES(0, 'default'::varchar, '', NULL::varchar, 0, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
+INSERT INTO "public"."Namespace"
+("AppId", "ClusterName", "NamespaceName", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
+VALUES('default'::varchar, 'default'::varchar, 'default'::varchar, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
+INSERT INTO "public"."NamespaceLock"
+("NamespaceId", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime", "IsDeleted", "DeletedAt")
+VALUES(0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP, 0, 0);
+INSERT INTO "public"."Release"
+("ReleaseKey", "Name", "Comment", "AppId", "ClusterName", "NamespaceName", "Configurations", "IsAbandoned", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
+VALUES(NULL::varchar, 'default'::varchar, '', 'default'::varchar, 'default'::varchar, 'default'::varchar, '', 0, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
+INSERT INTO "public"."ReleaseHistory"
+("AppId", "ClusterName", "NamespaceName", "BranchName", "ReleaseId", "PreviousReleaseId", "Operation", "OperationContext", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
+VALUES('default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, 0, 0, 0, '', 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
+INSERT INTO "public"."ReleaseMessage"
+("Message", "DataChange_LastTime")
+VALUES(NULL::varchar, CURRENT_TIMESTAMP);
+INSERT INTO "public"."ServerConfig"
+("Key", "Cluster", "Value", "Comment", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
+VALUES('default'::varchar, 'default'::varchar, 'default'::varchar, NULL::varchar, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
