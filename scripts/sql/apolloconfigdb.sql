@@ -60,7 +60,7 @@ CREATE TABLE "public"."AppNamespace" (
 	"AppId" character varying(64 char) NOT NULL DEFAULT NULL::varchar,
 	"Format" character varying(32 char) NOT NULL DEFAULT 'properties'::varchar,
 	"IsPublic" integer NOT NULL DEFAULT 0,
-	"Comment" character varying(64 char) NOT NULL DEFAULT NULL::varchar,
+	"Comment" character varying(64 char) NULL DEFAULT NULL::varchar,
 	"IsDeleted" integer NOT NULL DEFAULT 0,
 	"DeletedAt" bigint NOT NULL DEFAULT 0,
 	"DataChange_CreatedBy" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
@@ -185,7 +185,7 @@ CREATE TABLE "public"."Instance" (
 	"Id" bigint AUTO_INCREMENT,
 	"AppId" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
 	"ClusterName" character varying(32 char) NOT NULL DEFAULT 'default'::varchar,
-	"DataCenter" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
+	"DataCenter" character varying(64 char) NULL DEFAULT 'default'::varchar,
 	"Ip" character varying(32 char) NOT NULL DEFAULT NULL::varchar,
 	"DataChange_CreatedTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	"DataChange_LastTime" timestamp(0) without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -386,54 +386,3 @@ CREATE TABLE "public"."ServerConfig" (
 	CONSTRAINT "UK_Key_Cluster_DeletedAt_63B6F937" UNIQUE (Key, Cluster, DeletedAt)
 );
 CREATE INDEX DataChange_LastTime_DE221456 ON public.ServerConfig USING btree (DataChange_LastTime);
-
-
-
-INSERT INTO "public"."AccessKey"
-("AppId", "Secret", "IsEnabled", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES('default'::varchar, NULL::varchar, 0, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."App"
-("AppId", "Name", "OrgId", "OrgName", "OwnerName", "OwnerEmail", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES('default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."AppNamespace"
-("Name", "AppId", "Format", "IsPublic", "Comment", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES(NULL::varchar, NULL::varchar, 'properties'::varchar, 0, NULL::varchar, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."Audit"
-("EntityName", "EntityId", "OpName", "Comment", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES('default'::varchar, 0, 'default'::varchar, '', 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."Cluster"
-("Name", "AppId", "ParentClusterId", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES(NULL::varchar, NULL::varchar, 0, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."Commit"
-("ChangeSets", "AppId", "ClusterName", "NamespaceName", "Comment", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES('', 'default'::varchar, 'default'::varchar, 'default'::varchar, '', 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."GrayReleaseRule"
-("AppId", "ClusterName", "NamespaceName", "BranchName", "Rules", "ReleaseId", "BranchStatus", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES('default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, '[]'::text, 0, 1, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."Instance"
-("AppId", "ClusterName", "DataCenter", "Ip", "DataChange_CreatedTime", "DataChange_LastTime")
-VALUES('default'::varchar, 'default'::varchar, 'default'::varchar, NULL::varchar, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO "public"."InstanceConfig"
-("InstanceId", "ConfigAppId", "ConfigClusterName", "ConfigNamespaceName", "ReleaseKey", "ReleaseDeliveryTime", "DataChange_CreatedTime", "DataChange_LastTime")
-VALUES(0, 'default'::varchar, 'default'::varchar, 'default'::varchar, NULL::varchar, '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO "public"."Item"
-("NamespaceId", "Key", "Value", "Comment", "LineNum", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES(0, 'default'::varchar, '', NULL::varchar, 0, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."Namespace"
-("AppId", "ClusterName", "NamespaceName", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES('default'::varchar, 'default'::varchar, 'default'::varchar, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."NamespaceLock"
-("NamespaceId", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime", "IsDeleted", "DeletedAt")
-VALUES(0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP, 0, 0);
-INSERT INTO "public"."Release"
-("ReleaseKey", "Name", "Comment", "AppId", "ClusterName", "NamespaceName", "Configurations", "IsAbandoned", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES(NULL::varchar, 'default'::varchar, '', 'default'::varchar, 'default'::varchar, 'default'::varchar, '', 0, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."ReleaseHistory"
-("AppId", "ClusterName", "NamespaceName", "BranchName", "ReleaseId", "PreviousReleaseId", "Operation", "OperationContext", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES('default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, 0, 0, 0, '', 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."ReleaseMessage"
-("Message", "DataChange_LastTime")
-VALUES(NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."ServerConfig"
-("Key", "Cluster", "Value", "Comment", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES('default'::varchar, 'default'::varchar, 'default'::varchar, NULL::varchar, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);

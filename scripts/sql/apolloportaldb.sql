@@ -37,7 +37,7 @@ CREATE TABLE "public"."AppNamespace" (
 	"AppId" character varying(64 char) NOT NULL DEFAULT NULL::varchar,
 	"Format" character varying(32 char) NOT NULL DEFAULT 'properties'::varchar,
 	"IsPublic" integer NOT NULL DEFAULT 0,
-	"Comment" character varying(64 char) NOT NULL DEFAULT NULL::varchar,
+	"Comment" character varying(64 char) NULL DEFAULT NULL::varchar,
 	"IsDeleted" integer NOT NULL DEFAULT 0,
 	"DeletedAt" bigint NOT NULL DEFAULT 0,
 	"DataChange_CreatedBy" character varying(64 char) NOT NULL DEFAULT 'default'::varchar,
@@ -343,57 +343,3 @@ CREATE TABLE "public"."Users" (
 	CONSTRAINT "PRIMARY_85B151E3" PRIMARY KEY (Id),
 	CONSTRAINT "UK_Username_A3445096" UNIQUE (Username)
 );
-
-
-
-
-
-
-INSERT INTO "public"."App"
-("AppId", "Name", "OrgId", "OrgName", "OwnerName", "OwnerEmail", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES('default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."AppNamespace"
-("Name", "AppId", "Format", "IsPublic", "Comment", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES(NULL::varchar, NULL::varchar, 'properties'::varchar, 0, NULL::varchar, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."Authorities"
-("Username", "Authority")
-VALUES('', '');
-INSERT INTO "public"."Consumer"
-("AppId", "Name", "OrgId", "OrgName", "OwnerName", "OwnerEmail", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES('default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."ConsumerAudit"
-("ConsumerId", "Uri", "Method", "DataChange_CreatedTime", "DataChange_LastTime")
-VALUES(0, NULL::varchar, NULL::varchar, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO "public"."ConsumerRole"
-("ConsumerId", "RoleId", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES(0, 0, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."ConsumerToken"
-("ConsumerId", "Token", "Expires", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES(0, NULL::varchar, '2099-01-01 00:00:00'::timestamp without time zone, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."Favorite"
-("UserId", "AppId", "Position", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES('default'::varchar, 'default'::varchar, 10000, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."Permission"
-("PermissionType", "TargetId", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES(NULL::varchar, NULL::varchar, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."Role"
-("RoleName", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES(NULL::varchar, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."RolePermission"
-("RoleId", "PermissionId", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES(0, 0, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."SPRING_SESSION"
-("PRIMARY_ID", "SESSION_ID", "CREATION_TIME", "LAST_ACCESS_TIME", "MAX_INACTIVE_INTERVAL", "EXPIRY_TIME", "PRINCIPAL_NAME")
-VALUES('', '', 0, 0, 0, 0, '');
-INSERT INTO "public"."SPRING_SESSION_ATTRIBUTES"
-("SESSION_PRIMARY_ID", "ATTRIBUTE_NAME", "ATTRIBUTE_BYTES")
-VALUES('', '', '');
-INSERT INTO "public"."ServerConfig"
-("Key", "Value", "Comment", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES('default'::varchar, 'default'::varchar, NULL::varchar, 0, 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."UserRole"
-("UserId", "RoleId", "IsDeleted", "DeletedAt", "DataChange_CreatedBy", "DataChange_CreatedTime", "DataChange_LastModifiedBy", "DataChange_LastTime")
-VALUES(NULL::varchar, 0, '0'::"bit", 0, 'default'::varchar, CURRENT_TIMESTAMP, NULL::varchar, CURRENT_TIMESTAMP);
-INSERT INTO "public"."Users"
-("Username", "Password", "UserDisplayName", "Email", "Enabled")
-VALUES('default'::varchar, 'default'::varchar, 'default'::varchar, 'default'::varchar, 0);
