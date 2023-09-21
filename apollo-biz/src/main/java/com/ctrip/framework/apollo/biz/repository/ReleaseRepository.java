@@ -48,7 +48,7 @@ public interface ReleaseRepository extends PagingAndSortingRepository<Release, L
   List<Release> findByIdIn(Set<Long> releaseIds);
 
   @Modifying
-  @Query(nativeQuery = true,value = "update Release set IsDeleted = 1, DeletedAt = (EXTRACT(epoch FROM now()))::::bigint *1000, DataChange_LastModifiedBy = ?4 where appId=?1 and clusterName=?2 and namespaceName = ?3")
+  @Query(nativeQuery = true,value = "update Release set IsDeleted = 1, DeletedAt = floor(extract(epoch from now()))*1000, DataChange_LastModifiedBy = ?4 where appId=?1 and clusterName=?2 and namespaceName = ?3")
   int batchDelete(String appId, String clusterName, String namespaceName, String operator);
 
   // For release history conversion program, need to delete after conversion it done

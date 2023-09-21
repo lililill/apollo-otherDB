@@ -52,6 +52,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class NamespaceService {
 
   private static final Gson GSON = new Gson();

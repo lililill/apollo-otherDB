@@ -69,7 +69,7 @@ public class AppNamespaceService {
   }
 
   public AppNamespace findPublicAppNamespace(String namespaceName) {
-    List<AppNamespace> appNamespaces = appNamespaceRepository.findByNameAndIsPublic(namespaceName, true);
+    List<AppNamespace> appNamespaces = appNamespaceRepository.findByNameAndIsPublic(namespaceName, 1);
 
     if (CollectionUtils.isEmpty(appNamespaces)) {
       return null;
@@ -79,7 +79,7 @@ public class AppNamespaceService {
   }
 
   private List<AppNamespace> findAllPrivateAppNamespaces(String namespaceName) {
-    return appNamespaceRepository.findByNameAndIsPublic(namespaceName, false);
+    return appNamespaceRepository.findByNameAndIsPublic(namespaceName, 0);
   }
 
   public AppNamespace findByAppIdAndName(String appId, String namespaceName) {
@@ -136,7 +136,7 @@ public class AppNamespaceService {
     StringBuilder appNamespaceName = new StringBuilder();
     //add prefix postfix
     appNamespaceName
-        .append(appNamespace.isPublic() && appendNamespacePrefix ? app.getOrgId() + "." : "")
+        .append(appNamespace.isPublic()==1 && appendNamespacePrefix ? app.getOrgId() + "." : "")
         .append(appNamespace.getName())
         .append(appNamespace.formatAsEnum() == ConfigFileFormat.Properties ? "" : "." + appNamespace.getFormat());
     appNamespace.setName(appNamespaceName.toString());
@@ -158,7 +158,7 @@ public class AppNamespaceService {
     appNamespace.setDataChangeLastModifiedBy(operator);
 
     // globally uniqueness check for public app namespace
-    if (appNamespace.isPublic()) {
+    if (appNamespace.isPublic()==1) {
       checkAppNamespaceGlobalUniqueness(appNamespace);
     } else {
       // check private app namespace
@@ -180,7 +180,7 @@ public class AppNamespaceService {
   @Transactional
   public AppNamespace importAppNamespaceInLocal(AppNamespace appNamespace) {
     // globally uniqueness check for public app namespace
-    if (appNamespace.isPublic()) {
+    if (appNamespace.isPublic()==1) {
       checkAppNamespaceGlobalUniqueness(appNamespace);
     } else {
       // check private app namespace

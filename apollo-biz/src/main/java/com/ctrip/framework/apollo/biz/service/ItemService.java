@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class ItemService {
 
   private final ItemRepository itemRepository;
@@ -128,7 +129,7 @@ public class ItemService {
     }
     return items;
   }
-
+  @Transactional
   public List<Item> findItemsWithOrdered(String appId, String clusterName, String namespaceName) {
     Namespace namespace = namespaceService.findOne(appId, clusterName, namespaceName);
     if (namespace != null) {

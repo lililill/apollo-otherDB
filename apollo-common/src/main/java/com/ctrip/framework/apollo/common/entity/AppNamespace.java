@@ -22,6 +22,7 @@ import com.ctrip.framework.apollo.core.enums.ConfigFileFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -31,77 +32,77 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "AppNamespace")
-@SQLDelete(sql = "Update AppNamespace set IsDeleted = 1, DeletedAt = (EXTRACT(epoch FROM now()))::::bigint *1000 where Id = ?")
+@SQLDelete(sql = "Update AppNamespace set IsDeleted = 1, DeletedAt = floor(extract(epoch from now()))*1000 where Id = ?")
 @Where(clause = "isDeleted = '0'")
 public class AppNamespace extends BaseEntity {
 
-  @NotBlank(message = "AppNamespace Name cannot be blank")
-  @Pattern(
-      regexp = InputValidator.CLUSTER_NAMESPACE_VALIDATOR,
-      message = "Invalid Namespace format: " + InputValidator.INVALID_CLUSTER_NAMESPACE_MESSAGE + " & " + InputValidator.INVALID_NAMESPACE_NAMESPACE_MESSAGE
-  )
-  @Column(name = "Name", nullable = false)
-  private String name;
+    @NotBlank(message = "AppNamespace Name cannot be blank")
+    @Pattern(
+            regexp = InputValidator.CLUSTER_NAMESPACE_VALIDATOR,
+            message = "Invalid Namespace format: " + InputValidator.INVALID_CLUSTER_NAMESPACE_MESSAGE + " & " + InputValidator.INVALID_NAMESPACE_NAMESPACE_MESSAGE
+    )
+    @Column(name = "Name", nullable = false)
+    private String name;
 
-  @NotBlank(message = "AppId cannot be blank")
-  @Column(name = "AppId", nullable = false)
-  private String appId;
+    @NotBlank(message = "AppId cannot be blank")
+    @Column(name = "AppId", nullable = false)
+    private String appId;
 
-  @Column(name = "Format", nullable = false)
-  private String format;
+    @Column(name = "Format", nullable = false)
+    private String format;
 
-  @Column(name = "IsPublic", columnDefinition = "Bit default '0'")
-  private boolean isPublic = false;
+    @Column(name = "IsPublic")
+    private Integer isPublic = 0;
 
-  @Column(name = "Comment")
-  private String comment;
+    @Column(name = "Comment")
+    private String comment;
 
-  public String getAppId() {
-    return appId;
-  }
+    public String getAppId() {
+        return appId;
+    }
 
-  public String getComment() {
-    return comment;
-  }
+    public String getComment() {
+        return comment;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setAppId(String appId) {
-    this.appId = appId;
-  }
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
-  public void setComment(String comment) {
-    this.comment = comment;
-  }
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public boolean isPublic() {
-    return isPublic;
-  }
+    public Integer isPublic() {
+        return isPublic;
+    }
 
-  public void setPublic(boolean aPublic) {
-    isPublic = aPublic;
-  }
+    public void setPublic(Integer aPublic) {
+        this.isPublic = aPublic;
+    }
 
-  public ConfigFileFormat formatAsEnum() {
-    return ConfigFileFormat.fromString(this.format);
-  }
+    public ConfigFileFormat formatAsEnum() {
+        return ConfigFileFormat.fromString(this.format);
+    }
 
-  public String getFormat() {
-    return format;
-  }
+    public String getFormat() {
+        return format;
+    }
 
-  public void setFormat(String format) {
-    this.format = format;
-  }
+    public void setFormat(String format) {
+        this.format = format;
+    }
 
-  public String toString() {
-    return toStringHelper().add("name", name).add("appId", appId).add("comment", comment)
-        .add("format", format).add("isPublic", isPublic).toString();
-  }
+    public String toString() {
+        return toStringHelper().add("name", name).add("appId", appId).add("comment", comment)
+                .add("format", format).add("isPublic", isPublic).toString();
+    }
 }

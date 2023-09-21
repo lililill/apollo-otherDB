@@ -84,7 +84,7 @@ public class AppNamespaceService {
   }
 
   public List<AppNamespace> findPrivateAppNamespace(String appId) {
-    return appNamespaceRepository.findByAppIdAndIsPublic(appId, false);
+    return appNamespaceRepository.findByAppIdAndIsPublic(appId, 0);
   }
 
   public AppNamespace findOne(String appId, String namespaceName) {

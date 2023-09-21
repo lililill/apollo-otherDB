@@ -274,11 +274,11 @@ public class ConfigsImportService {
 
     String appId = toImportPubAppNS.getAppId();
     String namespaceName = toImportPubAppNS.getName();
-    boolean isPublic = toImportPubAppNS.isPublic();
+    Integer isPublic = toImportPubAppNS.isPublic();
 
     AppNamespace
         managedAppNamespace =
-        isPublic ? appNamespaceService.findPublicAppNamespace(namespaceName)
+        isPublic==1 ? appNamespaceService.findPublicAppNamespace(namespaceName)
                  : appNamespaceService.findByAppIdAndName(appId, namespaceName);
 
     if (managedAppNamespace == null) {

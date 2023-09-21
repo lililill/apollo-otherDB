@@ -27,7 +27,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Privilege")
-@SQLDelete(sql = "Update Privilege set IsDeleted = 1, DeletedAt = (EXTRACT(epoch FROM now()))::::bigint *1000 where Id = ?")
+@SQLDelete(sql = "Update Privilege set IsDeleted = 1, DeletedAt = floor(extract(epoch from now()))*1000 where Id = ?")
 @Where(clause = "isDeleted = '0'")
 public class Privilege extends BaseEntity {
 

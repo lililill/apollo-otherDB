@@ -40,10 +40,10 @@ public class ConfigBO {
 
   private final ConfigFileFormat format;
 
-  private final boolean isPublic;
+  private final Integer isPublic;
 
   public ConfigBO(Env env, String ownerName, String appId, String clusterName,
-      String namespace, boolean isPublic, String configFileContent, ConfigFileFormat format) {
+      String namespace, Integer isPublic, String configFileContent, ConfigFileFormat format) {
     this.env = env;
     this.ownerName = ownerName;
     this.appId = appId;
@@ -104,7 +104,7 @@ public class ConfigBO {
     return format;
   }
 
-  public boolean isPublic() {
+  public Integer isPublic() {
     return isPublic;
   }
 }

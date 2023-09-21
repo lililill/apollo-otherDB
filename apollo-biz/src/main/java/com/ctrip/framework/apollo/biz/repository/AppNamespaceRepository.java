@@ -36,17 +36,17 @@ public interface AppNamespaceRepository extends PagingAndSortingRepository<AppNa
 
   List<AppNamespace> findByNameInAndIsPublicTrue(Set<String> namespaceNames);
 
-  List<AppNamespace> findByAppIdAndIsPublic(String appId, boolean isPublic);
+  List<AppNamespace> findByAppIdAndIsPublic(String appId, Integer isPublic);
 
   List<AppNamespace> findByAppId(String appId);
 
   List<AppNamespace> findFirst500ByIdGreaterThanOrderByIdAsc(long id);
 
   @Modifying
-  @Query(nativeQuery = true,value = "UPDATE AppNamespace SET IsDeleted = 1, DeletedAt = (EXTRACT(epoch FROM now()))::::bigint *1000, DataChange_LastModifiedBy = ?2 WHERE AppId=?1")
+  @Query(nativeQuery = true,value = "UPDATE AppNamespace SET IsDeleted = 1, DeletedAt = floor(extract(epoch from now()))*1000, DataChange_LastModifiedBy = ?2 WHERE AppId=?1")
   int batchDeleteByAppId(String appId, String operator);
 
   @Modifying
-  @Query(nativeQuery = true,value = "UPDATE AppNamespace SET IsDeleted = 1, DeletedAt = (EXTRACT(epoch FROM now()))::::bigint *1000, DataChange_LastModifiedBy = ?3 WHERE AppId=?1 and Name = ?2")
+  @Query(nativeQuery = true,value = "UPDATE AppNamespace SET IsDeleted = 1, DeletedAt = floor(extract(epoch from now()))*1000, DataChange_LastModifiedBy = ?3 WHERE AppId=?1 and Name = ?2")
   int delete(String appId, String namespaceName, String operator);
 }

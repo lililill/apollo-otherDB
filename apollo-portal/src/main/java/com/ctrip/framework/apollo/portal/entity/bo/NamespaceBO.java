@@ -25,7 +25,7 @@ public class NamespaceBO {
   private int itemModifiedCnt;
   private List<ItemBO> items;
   private String format;
-  private boolean isPublic;
+  private Integer isPublic;
   private String parentAppId;
   private String comment;
   // is the configs hidden to current user?
@@ -63,11 +63,11 @@ public class NamespaceBO {
     this.format = format;
   }
 
-  public boolean isPublic() {
+  public Integer isPublic() {
     return isPublic;
   }
 
-  public void setPublic(boolean aPublic) {
+  public void setPublic(Integer aPublic) {
     isPublic = aPublic;
   }
 

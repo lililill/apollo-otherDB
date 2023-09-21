@@ -28,7 +28,7 @@ public class AppNamespaceDTO extends BaseDTO{
 
   private String format;
 
-  private boolean isPublic = false;
+  private Integer isPublic = 0;
 
   public long getId() {
     return id;
@@ -62,11 +62,11 @@ public class AppNamespaceDTO extends BaseDTO{
     this.format = format;
   }
 
-  public boolean isPublic() {
+  public Integer isPublic() {
     return isPublic;
   }
 
-  public void setPublic(boolean aPublic) {
+  public void setPublic(Integer aPublic) {
     isPublic = aPublic;
   }
 

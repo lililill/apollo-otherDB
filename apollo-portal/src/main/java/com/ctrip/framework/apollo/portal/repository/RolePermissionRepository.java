@@ -36,6 +36,6 @@ public interface RolePermissionRepository extends PagingAndSortingRepository<Rol
   List<RolePermission> findByRoleIdIn(Collection<Long> roleId);
 
   @Modifying
-  @Query(nativeQuery = true,value = "UPDATE RolePermission SET IsDeleted = 1, DeletedAt = (EXTRACT(epoch FROM now()))::::bigint *1000, DataChange_LastModifiedBy = ?2 WHERE PermissionId in ?1")
+  @Query(nativeQuery = true,value = "UPDATE RolePermission SET IsDeleted = 1, DeletedAt = floor(extract(epoch from now()))*1000, DataChange_LastModifiedBy = ?2 WHERE PermissionId in ?1")
   Integer batchDeleteByPermissionIds(List<Long> permissionIds, String operator);
 }

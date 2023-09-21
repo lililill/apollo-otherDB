@@ -44,6 +44,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -52,6 +53,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+
 public class ItemService {
   private static final Gson GSON = new Gson();
 
@@ -129,7 +131,7 @@ public class ItemService {
     itemAPI.updateItemsByChangeSet(appId, env, clusterName, namespaceName, changeSets);
   }
 
-
+  @Transactional
   public ItemDTO createItem(String appId, Env env, String clusterName, String namespaceName, ItemDTO item) {
     NamespaceDTO namespace = namespaceAPI.loadNamespace(appId, env, clusterName, namespaceName);
     if (namespace == null) {
@@ -142,7 +144,7 @@ public class ItemService {
     Tracer.logEvent(TracerEventType.MODIFY_NAMESPACE, String.format("%s+%s+%s+%s", appId, env, clusterName, namespaceName));
     return itemDTO;
   }
-
+  @Transactional
   public ItemDTO createCommentItem(String appId, Env env, String clusterName, String namespaceName, ItemDTO item) {
     NamespaceDTO namespace = namespaceAPI.loadNamespace(appId, env, clusterName, namespaceName);
     if (namespace == null) {
@@ -153,27 +155,27 @@ public class ItemService {
 
     return itemAPI.createCommentItem(appId, env, clusterName, namespaceName, item);
   }
-
+  @Transactional
   public void updateItem(String appId, Env env, String clusterName, String namespaceName, ItemDTO item) {
     itemAPI.updateItem(appId, env, clusterName, namespaceName, item.getId(), item);
   }
-
+  @Transactional
   public void deleteItem(Env env, long itemId, String userId) {
     itemAPI.deleteItem(env, itemId, userId);
   }
-
+  @Transactional
   public List<ItemDTO> findItems(String appId, Env env, String clusterName, String namespaceName) {
     return itemAPI.findItems(appId, env, clusterName, namespaceName);
   }
-
+  @Transactional
   public List<ItemDTO> findDeletedItems(String appId, Env env, String clusterName, String namespaceName) {
     return itemAPI.findDeletedItems(appId, env, clusterName, namespaceName);
   }
-
+  @Transactional
   public ItemDTO loadItem(Env env, String appId, String clusterName, String namespaceName, String key) {
     return itemAPI.loadItem(env, appId, clusterName, namespaceName, key);
   }
-
+  @Transactional
   public ItemDTO loadItemById(Env env, long itemId) {
     ItemDTO item = itemAPI.loadItemById(env, itemId);
     if (item == null) {
