@@ -24,7 +24,6 @@ import com.ctrip.framework.apollo.biz.registry.DatabaseDiscoveryWithoutDecorator
 import com.ctrip.framework.apollo.biz.registry.configuration.ApolloServiceDiscoveryAutoConfiguration;
 import com.ctrip.framework.apollo.biz.registry.configuration.ApolloServiceRegistryAutoConfiguration;
 import com.ctrip.framework.apollo.biz.registry.configuration.support.ApolloServiceDiscoveryProperties;
-import com.ctrip.framework.apollo.biz.repository.ServiceRegistryRepository;
 import com.ctrip.framework.apollo.biz.service.ServiceRegistryService;
 import java.util.List;
 import org.junit.Test;
@@ -37,7 +36,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
@@ -62,7 +60,6 @@ import org.springframework.test.context.TestPropertySource;
     ApolloServiceDiscoveryWithoutDecoratorAutoConfiguration.class,
     ApolloServiceDiscoveryAutoConfiguration.class,
 })
-@EnableJpaRepositories(basePackageClasses = ServiceRegistryRepository.class)
 public class DatabaseDiscoveryWithoutDecoratorIntegrationTest extends AbstractIntegrationTest {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
