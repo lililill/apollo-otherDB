@@ -1,5 +1,5 @@
 ./scripts/build.sh 
-mkdir ./docker_build/apollo-adminservice/apollo-adminservice
+mkdir -p ./docker_build/apollo-adminservice/apollo-adminservice
 cp ./apollo-adminservice/target/apollo-adminservice-2.0.0-github.zip ./docker_build/apollo-adminservice/apollo-adminservice/
 cd docker_build/apollo-adminservice/apollo-adminservice/
 unzip ./apollo-adminservice-2.0.0-github.zip 
@@ -10,7 +10,7 @@ docker build . -t apollo-adminservice-oc2:2.0.0
 cd ..
 cd ..
 
-mkdir ./docker_build/apollo-configservice/apollo-configservice
+mkdir -p  ./docker_build/apollo-configservice/apollo-configservice
 cp ./apollo-configservice/target/apollo-configservice-2.0.0-github.zip ./docker_build/apollo-configservice/apollo-configservice/
 cd docker_build/apollo-configservice/apollo-configservice/
 unzip ./apollo-configservice-2.0.0-github.zip 
@@ -22,7 +22,7 @@ cd ..
 cd ..
 
 
-mkdir ./docker_build/apollo-portal/apollo-portal
+mkdir -p  ./docker_build/apollo-portal/apollo-portal
 cp ./apollo-portal/target/apollo-portal-2.0.0-github.zip ./docker_build/apollo-portal/apollo-portal/
 cd docker_build/apollo-portal/apollo-portal/
 unzip ./apollo-portal-2.0.0-github.zip 
@@ -33,7 +33,7 @@ docker build . -t apollo-portal-oc2:2.0.0
 cd ..
 cd ..
 
-mkdir image-tar
+mkdir -p image-tar
 cd image-tar
 docker save -o ./apollo-portal-oc2.tar apollo-portal-oc2:2.0.0  
 docker save -o ./apollo-configservice-oc2.tar apollo-configservice-oc2:2.0.0  
