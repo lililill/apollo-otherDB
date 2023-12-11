@@ -57,3 +57,4 @@ management:
   health:
     status:
       order: DOWN, OUT_OF_SERVICE, UNKNOWN, UP
+
