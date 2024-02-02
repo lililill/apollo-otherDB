@@ -15,11 +15,17 @@
 #
 
 spring:
+  datasource:
+    driver-class-name: com.kingbase8.Driver
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         globally_quoted_identifiers: 'false'
     hibernate:
+      temp:
+        use_jdbc_metadata_defaults: 'false'
       globally_quoted_identifiers: 'false'
       # Naming strategy
       naming:
