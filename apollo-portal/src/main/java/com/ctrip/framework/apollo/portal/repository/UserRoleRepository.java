@@ -45,7 +45,7 @@ public interface UserRoleRepository extends PagingAndSortingRepository<UserRole,
   List<UserRole> findByUserIdInAndRoleId(Collection<String> userId, long roleId);
 
   @Modifying
-  @Query("UPDATE UserRole SET IsDeleted = true, DeletedAt = ROUND(UNIX_TIMESTAMP(NOW(4))*1000), DataChange_LastModifiedBy = ?2 WHERE RoleId in ?1 and IsDeleted = false")
+  @Query(nativeQuery = true, value ="UPDATE \"UserRole\" SET \"IsDeleted\" = true, \"DeletedAt\" = ROUND(extract (epoch from now())), \"DataChange_LastModifiedBy\" = ?2 WHERE \"RoleId\" in ?1 and \"IsDeleted\" = false")
   Integer batchDeleteByRoleIds(List<Long> roleIds, String operator);
 
 }

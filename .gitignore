@@ -26,4 +26,5 @@ target
 # git
 *.orig
 .flattened-pom.xml
+!apollo-common/libs/*
 

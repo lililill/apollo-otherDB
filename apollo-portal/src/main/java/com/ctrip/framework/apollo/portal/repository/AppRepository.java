@@ -30,17 +30,17 @@ import java.util.Set;
 
 public interface AppRepository extends PagingAndSortingRepository<App, Long> {
 
-  App findByAppId(String appId);
+    App findByAppId(String appId);
 
-  List<App> findByOwnerName(String ownerName, Pageable page);
+    List<App> findByOwnerName(String ownerName, Pageable page);
 
-  List<App> findByAppIdIn(Set<String> appIds);
+    List<App> findByAppIdIn(Set<String> appIds);
 
-  List<App> findByAppIdIn(Set<String> appIds, Pageable pageable);
+    List<App> findByAppIdIn(Set<String> appIds, Pageable pageable);
 
-  Page<App> findByAppIdContainingOrNameContaining(String appId, String name, Pageable pageable);
+    Page<App> findByAppIdContainingOrNameContaining(String appId, String name, Pageable pageable);
 
-  @Modifying
-  @Query("UPDATE App SET IsDeleted = true, DeletedAt = ROUND(UNIX_TIMESTAMP(NOW(4))*1000), DataChange_LastModifiedBy = ?2 WHERE AppId=?1 and IsDeleted = false")
-  int deleteApp(String appId, String operator);
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE \"App\" SET \"IsDeleted\" = true, \"DeletedAt\" = ROUND(extract (epoch from now())), \"DataChange_LastModifiedBy\" = ?2 WHERE \"AppId\"=?1 and \"IsDeleted\" = false")
+    int deleteApp(String appId, String operator);
 }

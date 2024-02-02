@@ -37,6 +37,6 @@ public interface ReleaseMessageRepository extends PagingAndSortingRepository<Rel
 
   List<ReleaseMessage> findFirst100ByMessageAndIdLessThanOrderByIdAsc(String message, Long id);
 
-  @Query("select message, max(id) as id from ReleaseMessage where message in :messages group by message")
+  @Query(nativeQuery = true, value ="select \"Message\", max(\"Id\") as id from \"ReleaseMessage\" where \"Message\" in :messages group by \"Message\"")
   List<Object[]> findLatestReleaseMessagesGroupByMessages(@Param("messages") Collection<String> messages);
 }

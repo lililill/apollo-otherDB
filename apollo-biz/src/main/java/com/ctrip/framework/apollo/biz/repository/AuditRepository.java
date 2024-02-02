@@ -26,10 +26,10 @@ import java.util.List;
 
 public interface AuditRepository extends PagingAndSortingRepository<Audit, Long> {
 
-  @Query("SELECT a from Audit a WHERE a.dataChangeCreatedBy = :owner")
+  @Query(nativeQuery = true, value ="SELECT a from \"Audit\" a WHERE a.\"DataChangeCreatedBy\" = :owner")
   List<Audit> findByOwner(@Param("owner") String owner);
 
-  @Query("SELECT a from Audit a WHERE a.dataChangeCreatedBy = :owner AND a.entityName =:entity AND a.opName = :op")
+  @Query(nativeQuery = true, value ="SELECT a from \"Audit\" a WHERE a.\"DataChangeCreatedBy\" = :owner AND a.\"EntityName\" =:entity AND a.\"OpName\" = :op")
   List<Audit> findAudits(@Param("owner") String owner, @Param("entity") String entity,
       @Param("op") String op);
 }

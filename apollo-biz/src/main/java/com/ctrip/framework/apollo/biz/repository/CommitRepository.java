@@ -35,7 +35,7 @@ public interface CommitRepository extends PagingAndSortingRepository<Commit, Lon
       String appId, String clusterName, String namespaceName, Date dataChangeLastModifiedTime, Pageable pageable);
 
   @Modifying
-  @Query("update Commit set IsDeleted = true, DeletedAt = ROUND(UNIX_TIMESTAMP(NOW(4))*1000), DataChange_LastModifiedBy = ?4 where AppId=?1 and ClusterName=?2 and NamespaceName = ?3 and IsDeleted = false")
+  @Query(nativeQuery = true, value ="update \"Commit\" set \"IsDeleted\" = true, \"DeletedAt\" = ROUND(extract (epoch from now())), \"DataChange_LastModifiedBy\" = ?4 where \"AppId\"=?1 and \"ClusterName\"=?2 and \"NamespaceName\" = ?3 and \"IsDeleted\" = false")
   int batchDelete(String appId, String clusterName, String namespaceName, String operator);
 
   List<Commit> findByAppIdAndClusterNameAndNamespaceNameAndChangeSetsLikeOrderByIdDesc(String appId, String clusterName, String namespaceName,String changeSets, Pageable page);

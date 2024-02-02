@@ -32,17 +32,17 @@ public interface RoleRepository extends PagingAndSortingRepository<Role, Long> {
    */
   Role findTopByRoleName(String roleName);
 
-  @Query("SELECT r.id from Role r where (r.roleName = CONCAT('Master+', ?1) "
-      + "OR r.roleName like CONCAT('ModifyNamespace+', ?1, '+%') "
-      + "OR r.roleName like CONCAT('ReleaseNamespace+', ?1, '+%')  "
-      + "OR r.roleName = CONCAT('ManageAppMaster+', ?1))")
+  @Query(nativeQuery = true, value ="SELECT r.\"Id\" from \"Role\" r where (r.\"RoleName\" = CONCAT('Master+', ?1) "
+      + "OR r.\"RoleName\" like CONCAT('ModifyNamespace+', ?1, '+%') "
+      + "OR r.\"RoleName\" like CONCAT('ReleaseNamespace+', ?1, '+%')  "
+      + "OR r.\"RoleName\" = CONCAT('ManageAppMaster+', ?1))")
   List<Long> findRoleIdsByAppId(String appId);
 
-  @Query("SELECT r.id from Role r where (r.roleName = CONCAT('ModifyNamespace+', ?1, '+', ?2) "
-      + "OR r.roleName = CONCAT('ReleaseNamespace+', ?1, '+', ?2))")
+  @Query(nativeQuery = true, value ="SELECT r.\"Id\" from \"Role\" r where (r.\"RoleName\" = CONCAT('ModifyNamespace+', ?1, '+', ?2) "
+      + "OR r.\"RoleName\" = CONCAT('ReleaseNamespace+', ?1, '+', ?2))")
   List<Long> findRoleIdsByAppIdAndNamespace(String appId, String namespaceName);
 
   @Modifying
-  @Query("UPDATE Role SET IsDeleted = true, DeletedAt = ROUND(UNIX_TIMESTAMP(NOW(4))*1000), DataChange_LastModifiedBy = ?2 WHERE Id in ?1 and IsDeleted = false")
+  @Query(nativeQuery = true, value ="UPDATE \"Role\" SET \"IsDeleted\" = true, \"DeletedAt\" = ROUND(extract (epoch from now())), \"DataChange_LastModifiedBy\" = ?2 WHERE \"Id\" in ?1 and \"IsDeleted\" = false")
   Integer batchDelete(List<Long> roleIds, String operator);
 }

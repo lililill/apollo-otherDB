@@ -44,18 +44,18 @@ public interface InstanceConfigRepository extends PagingAndSortingRepository<Ins
       String appId, String clusterName, String namespaceName, Date validDate, Set<String> releaseKey);
 
   @Modifying
-  @Query("delete from InstanceConfig  where ConfigAppId=?1 and ConfigClusterName=?2 and ConfigNamespaceName = ?3")
+  @Query(nativeQuery = true, value ="delete from \"InstanceConfig\"  where \"ConfigAppId\"=?1 and \"ConfigClusterName\"=?2 and \"ConfigNamespaceName\" = ?3")
   int batchDelete(String appId, String clusterName, String namespaceName);
 
   @Query(
-      value = "select b.Id from InstanceConfig a inner join Instance b on b.Id =" +
-          " a.`InstanceId` where a.`ConfigAppId` = :configAppId and a.`ConfigClusterName` = " +
-          ":clusterName and a.`ConfigNamespaceName` = :namespaceName and a.`DataChange_LastTime` " +
-          "> :validDate and b.`AppId` = :instanceAppId",
-      countQuery = "select count(1) from InstanceConfig a inner join Instance b on b.Id =" +
-          " a.`InstanceId` where a.`ConfigAppId` = :configAppId and a.`ConfigClusterName` = " +
-          ":clusterName and a.`ConfigNamespaceName` = :namespaceName and a.`DataChange_LastTime` " +
-          "> :validDate and b.`AppId` = :instanceAppId",
+      value = "select b.\"Id\" from \"InstanceConfig\" a inner join \"Instance\" b on b.\"Id\" =" +
+          " a.\"InstanceId\" where a.\"ConfigAppId\" = :configAppId and a.\"ConfigClusterName\" = " +
+          ":clusterName and a.\"ConfigNamespaceName\" = :namespaceName and a.\"DataChange_LastTime\" " +
+          "> :validDate and b.\"AppId\" = :instanceAppId",
+      countQuery = "select count(1) from \"InstanceConfig\" a inner join \"Instance\" b on b.\"Id\" =" +
+          " a.\"InstanceId\" where a.\"ConfigAppId\" = :configAppId and a.\"ConfigClusterName\" = " +
+          ":clusterName and a.\"ConfigNamespaceName\" = :namespaceName and a.\"DataChange_LastTime\" " +
+          "> :validDate and b.\"AppId\" = :instanceAppId",
       nativeQuery = true)
   Page<Object> findInstanceIdsByNamespaceAndInstanceAppId(
       @Param("instanceAppId") String instanceAppId, @Param("configAppId") String configAppId,
