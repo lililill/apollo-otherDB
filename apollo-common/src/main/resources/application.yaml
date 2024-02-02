@@ -15,12 +15,15 @@
 #
 
 spring:
+  datasource:
+    driver-class-name: dm.jdbc.driver.DmDriver
   jpa:
     properties:
       hibernate:
-        globally_quoted_identifiers: 'false'
+        dialect: org.hibernate.dialect.DmDialect
+        globally_quoted_identifiers: 'true'
     hibernate:
-      globally_quoted_identifiers: 'false'
+      globally_quoted_identifiers: 'true'
       # Naming strategy
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
