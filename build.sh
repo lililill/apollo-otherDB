@@ -1,19 +1,22 @@
 #2.0.0升级2.2.0 APOLLOCONFIGDB 下 添加字段：ALTER TABLE Item ADD COLUMN Type  int NOT NULL DEFAULT '0';
 
 ./scripts/build.sh
-mkdir ./docker_build/apollo-adminservice/apollo-adminservice
+rm -rf ./docker_build
+mkdir -p ./docker_build/apollo-adminservice/apollo-adminservice
 cp ./apollo-adminservice/target/apollo-adminservice-2.2.0-github.zip ./docker_build/apollo-adminservice/apollo-adminservice/
+cp ./apollo-adminservice/Dockerfile ./docker_build/apollo-adminservice/
 cd docker_build/apollo-adminservice/apollo-adminservice/
-unzip ./apollo-adminservice-2.2.0-github.zip 
+unzip ./apollo-adminservice-2.2.0-github.zip
 rm -f ./apollo-adminservice-2.2.0-github.zip
 cd ..
-docker build . -t apollo-adminservice-dm8:2.2.0 --platform linux/arm64
+docker build  . -t apollo-adminservice-dm8:2.2.0 --platform linux/arm64
 
 cd ..
 cd ..
 
-mkdir ./docker_build/apollo-configservice/apollo-configservice
+mkdir -p ./docker_build/apollo-configservice/apollo-configservice
 cp ./apollo-configservice/target/apollo-configservice-2.2.0-github.zip ./docker_build/apollo-configservice/apollo-configservice/
+cp ./apollo-configservice/Dockerfile ./docker_build/apollo-configservice/
 cd docker_build/apollo-configservice/apollo-configservice/
 unzip ./apollo-configservice-2.2.0-github.zip 
 rm -f ./apollo-configservice-2.2.0-github.zip
@@ -24,8 +27,10 @@ cd ..
 cd ..
 
 
-mkdir ./docker_build/apollo-portal/apollo-portal
+mkdir -p ./docker_build/apollo-portal/apollo-portal
 cp ./apollo-portal/target/apollo-portal-2.2.0-github.zip ./docker_build/apollo-portal/apollo-portal/
+cp ./apollo-portal/Dockerfile ./docker_build/apollo-portal/
+
 cd docker_build/apollo-portal/apollo-portal/
 unzip ./apollo-portal-2.2.0-github.zip 
 rm -f ./apollo-portal-2.2.0-github.zip
