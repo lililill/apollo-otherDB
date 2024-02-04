@@ -23,9 +23,9 @@
 
 # Create Database
 # ------------------------------------------------------------
-CREATE DATABASE IF NOT EXISTS ApolloPortalDB DEFAULT CHARACTER SET = utf8mb4;
+CREATE DATABASE IF NOT EXISTS ApolloPortalDB_2_2_0 DEFAULT CHARACTER SET = utf8mb4;
 
-Use ApolloPortalDB;
+Use ApolloPortalDB_2_2_0;
 
 # Dump of table app
 # ------------------------------------------------------------
