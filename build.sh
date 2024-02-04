@@ -7,7 +7,7 @@ cd docker_build/apollo-adminservice/apollo-adminservice/
 unzip ./apollo-adminservice-2.2.0-github.zip 
 rm -f ./apollo-adminservice-2.2.0-github.zip
 cd ..
-docker build . -t apollo-adminservice-dm8:2.2.0
+docker build . -t apollo-adminservice-dm8:2.2.0 --platform linux/arm64
 
 cd ..
 cd ..
@@ -18,7 +18,7 @@ cd docker_build/apollo-configservice/apollo-configservice/
 unzip ./apollo-configservice-2.2.0-github.zip 
 rm -f ./apollo-configservice-2.2.0-github.zip
 cd ..
-docker build . -t apollo-configservice-dm8:2.2.0
+docker build . -t apollo-configservice-dm8:2.2.0 --platform linux/arm64
 
 cd ..
 cd ..
@@ -30,7 +30,7 @@ cd docker_build/apollo-portal/apollo-portal/
 unzip ./apollo-portal-2.2.0-github.zip 
 rm -f ./apollo-portal-2.2.0-github.zip
 cd ..
-docker build . -t apollo-portal-dm8:2.2.0
+docker build . -t apollo-portal-dm8:2.2.0 --platform linux/arm64
 
 cd ..
 cd ..
