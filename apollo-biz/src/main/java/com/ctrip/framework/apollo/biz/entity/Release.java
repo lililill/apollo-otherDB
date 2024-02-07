@@ -50,7 +50,7 @@ public class Release extends BaseEntity {
   private String namespaceName;
 
   @Column(name = "`Configurations`", nullable = false)
-  @Lob
+//  @Lob
   private String configurations;
 
   @Column(name = "`Comment`", nullable = false)

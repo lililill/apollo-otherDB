@@ -32,7 +32,7 @@ import javax.persistence.Table;
 @Where(clause = "`IsDeleted` = false")
 public class Commit extends BaseEntity {
 
-  @Lob
+//  @Lob
   @Column(name = "`ChangeSets`", nullable = false)
   private String changeSets;
 

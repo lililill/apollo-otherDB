@@ -42,7 +42,7 @@ public class Item extends BaseEntity {
   private int type;
 
   @Column(name = "`Value`")
-  @Lob
+//  @Lob
   private String value;
 
   @Column(name = "`Comment`")
