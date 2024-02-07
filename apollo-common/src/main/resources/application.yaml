@@ -19,7 +19,7 @@ spring:
   datasource:
     driver-class-name: com.kingbase8.Driver
   jpa:
-    show-sql: true
+#    show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
