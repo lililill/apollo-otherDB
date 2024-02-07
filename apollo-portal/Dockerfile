@@ -1,49 +1,21 @@
-#
-# Copyright 2024 Apollo Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-# Dockerfile for apollo-portal
-# 1. ./scripts/build.sh
-# 2. Build with: mvn docker:build -pl apollo-portal
-# 3. Run with: docker run -p 8070:8070 -e SPRING_DATASOURCE_URL="jdbc:mysql://fill-in-the-correct-server:3306/ApolloPortalDB?characterEncoding=utf8" -e SPRING_DATASOURCE_USERNAME=FillInCorrectUser -e SPRING_DATASOURCE_PASSWORD=FillInCorrectPassword -e APOLLO_PORTAL_ENVS=dev,pro -e DEV_META=http://fill-in-dev-meta-server:8080 -e PRO_META=http://fill-in-pro-meta-server:8080 -d -v /tmp/logs:/opt/logs --name apollo-portal apolloconfig/apollo-portal
+FROM openjdk:8-jdk-alpine
+#jdk采用openjdk8,操作系统采用alpine，减小体积
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+#修改镜像源为阿里源
+ENV LANG=en_US.UTF-8
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+RUN echo 'Asia/Shanghai' >/etc/timezone
+#修改时区及默认字符集
 
-FROM alpine:3.15.5
+RUN apk add --update --no-cache ttf-dejavu fontconfig busybox-extras iproute2 curl net-tools tcpdump wget  bash-doc  bash-completion && \
+	rm -rf /var/cache/apk/*
+#添加常用工具及字符集字体等
 
-ARG VERSION
-ENV VERSION $VERSION
+ENV APOLLO_RUN_MODE=Docker
+ENV SERVER_PORT=8070
+EXPOSE 8070
 
-COPY apollo-portal-${VERSION}-github.zip /apollo-portal/apollo-portal-${VERSION}-github.zip
-
-RUN unzip /apollo-portal/apollo-portal-${VERSION}-github.zip -d /apollo-portal \
-    && rm -rf /apollo-portal/apollo-portal-${VERSION}-github.zip \
-    && chmod +x /apollo-portal/scripts/startup.sh
-
-FROM openjdk:8-jre-slim
-LABEL maintainer="g632104866@gmail.com;finchcn@gmail.com;ameizi<sxyx2008@163.com>"
-
-ENV APOLLO_RUN_MODE "Docker"
-ENV SERVER_PORT 8070
-
-RUN echo "deb http://mirrors.aliyun.com/debian/ bullseye main non-free contrib" > /etc/apt/sources.list \
-    && echo "deb http://mirrors.aliyun.com/debian-security/ bullseye-security main" >> /etc/apt/sources.list \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends procps curl bash tzdata \
-    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && echo "Asia/Shanghai" > /etc/timezone
-
-COPY --from=0 /apollo-portal /apollo-portal
-
-EXPOSE $SERVER_PORT
-
+COPY ./apollo-portal  /apollo-portal
+#CMD ["/bin/sh", "-c", "tail -f /dev/null"]
 CMD ["/apollo-portal/scripts/startup.sh"]
+
