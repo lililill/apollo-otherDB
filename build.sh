@@ -42,6 +42,7 @@ docker build . -t apollo-portal-kingbase8-pg:2.2.0
 cd ..
 cd ..
 
+rm -rf ./image-tar
 mkdir image-tar
 cd image-tar
 docker save -o ./apollo-portal-kingbase8-pg.tar apollo-portal-kingbase8-pg:2.2.0
