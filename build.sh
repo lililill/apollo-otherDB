@@ -1,3 +1,5 @@
+mvn install:install-file -Dfile=./apollo-common/libs/kingbase8-8.6.0.jar -DgroupId=com.kingbase8.jdbc  -DartifactId=kingbase8 -Dversion=8.6.0 -Dpackaging=jar
+
 ./scripts/build.sh
 rm -rf ./docker_build
 mkdir -p ./docker_build/apollo-adminservice/apollo-adminservice
